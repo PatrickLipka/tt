@@ -20,8 +20,13 @@ int main(){
     ProjectList proj_list;
     proj_list.add_project(proj);
     std::cout << "Project List no of projects: " << proj_list.num_projects << " Name of active proj: " << proj_list.projects[proj_list.active_project].name << std::endl;
+
+    std::cout << "Write Project List to file" << std::endl;
+    proj_list.save("test.bin");
     
-    proj_list.remove_project(0);
-    std::cout << "Project List no of projects: " << proj_list.num_projects << std::endl;
+    std::cout << "Read Project List from file" << std::endl;
+    ProjectList list2;
+    list2.load("test.bin");
+
     return 0;
 }

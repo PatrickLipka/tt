@@ -23,6 +23,8 @@ class ProjectList{
         void add_project(Project proj);
         void remove_project(int id);
         int active_project;
+        void save(std::string file_name);
+        void load(std::string file_name);
 };
 
 #endif
