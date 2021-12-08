@@ -44,13 +44,15 @@ void ProjectList::save(std::string file_name){
     of.write((char*) &num_projects, sizeof(int));
     of.write((char*) &active_project, sizeof(int));
     for (int i=0; i<num_projects; i++){
-        int len = projects[i].name.length();
-        of.write((char*) &len, sizeof(int));
-        of.write((char*) &(projects[i].name),ProjectList::projects[i].name.length());
+        size_t len = projects[i].name.size();
+        of.write((char*) &len, sizeof(size_t));
+        of.write((char*) projects[i].name.c_str(),len);
         of.write((char*) &(projects[i].num_tasks), sizeof(int));
         of.write((char*) &(projects[i].active_task), sizeof(int));
         for (int j=0; j<projects[i].num_tasks; j++){
-            of.write((char*) &(projects[i].tasks[j].name), projects[i].tasks[j].name.length());
+            size_t task_name_len = projects[i].tasks[j].name.size();
+            of.write((char*) &task_name_len, sizeof(size_t));
+            of.write((char*) projects[i].tasks[j].name.c_str(), len);
             of.write((char*) &(projects[i].tasks[j].work_time), sizeof(int));
         }
     }
@@ -63,16 +65,38 @@ void ProjectList::load(std::string file_name){
         std::cout << "Could not open file " << file_name << " for reading!" << std::endl;
         exit(1);
     }
-    
     inf.read((char*) &num_projects,sizeof(int));
-    std::cout << "Num projects read:" << num_projects << std::endl;
+    std::cout << "num projects: " << num_projects << std::endl;
     inf.read((char*) &active_project, sizeof(int));
     for (int i=0; i<num_projects;i++){
-        int tmp_len;
-        std::string tmp_name;
-        inf.read((char*) &tmp_len, sizeof(int));
-        std::cout << "tmp_len read: "<< tmp_len <<std::endl;
-        inf.read((char*) &tmp_name, tmp_len);
-        std::cout << "name read: " << tmp_name << std::endl;
+        size_t len;
+        std::string proj_name;
+        //std::cout << "about to read name" << std::endl;
+        inf.read((char*) &len, sizeof(size_t));
+        //std::cout << "name read" << std::endl;
+        char* tmp_name = new char[len+1];
+        inf.read(tmp_name, len);
+        tmp_name[len] = '\0';
+        proj_name = tmp_name;
+        Project proj(proj_name);
+        delete [] tmp_name;
+        inf.read((char*) &(proj.num_tasks), sizeof(int));
+        inf.read((char*) &(proj.active_task), sizeof(int));
+        for (int j; j<proj.num_tasks; j++){
+            std::cout << "jloop" << std::endl;
+            std::string task_name;
+            size_t task_name_len;
+            inf.read((char*) &task_name_len, sizeof(size_t));
+            char* tmp_task_name = new char[task_name_len+1];
+            inf.read(tmp_task_name, task_name_len);
+            tmp_task_name[len] = '\0';
+            task_name = tmp_task_name;
+            delete [] tmp_task_name;
+            Task task(task_name);
+            inf.read((char*) &(task.work_time), sizeof(int));
+            proj.add_task(task);       
+            std::cout << "Task " << task.name << "read." << std::endl;
+        }
+        add_project(proj);
     }
 }
