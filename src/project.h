@@ -16,5 +16,13 @@ class Project{
         int active_task;
 };
 
+class ProjectList{
+    public:
+        int num_projects;
+        std::vector<Project> projects;
+        void add_project(Project proj);
+        void remove_project(int id);
+        int active_project;
+};
 
 #endif
