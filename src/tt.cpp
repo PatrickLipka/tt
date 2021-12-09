@@ -1,10 +1,39 @@
 #include <iostream>
 #include <vector>
+#include <signal.h>
+#include <unistd.h>
+#include <stdlib.h>
 #include "task.h"
 #include "project.h"
 
-int main(){
-    
+int sigint;
+
+void handler(int signum){
+    sigint = 1;
+    std::cout << std::endl;
+}
+
+void track(Project *proj){
+    int worktime = 0;
+    int work_h, work_m, work_s;
+    time_t start;
+    system("clear");
+    time(&start);
+    std::cout << "Started tracking of task " << proj->name << "/" << proj->active_task->name << " at " << ctime(&start) << std::endl;
+    while (!sigint){
+        sleep(1);
+        worktime += 1;
+    }
+    proj->active_task->add_time(worktime);
+    work_h = (worktime % 86400) / 3600;
+    work_m = (worktime % 3600) / 60;
+    work_s = worktime % 60;
+    // TODO: replace with proper cout call
+    printf("Time worked on project: %02d:%02d:%02d\n", work_h,work_m,work_s );
+}
+
+int main(){ 
+    signal(SIGINT, handler);
     Task task("Test task");
     task.add_time(140);
     std::cout << "Task name: " << task.name << ", Work Time: " << task.work_time << std::endl;
@@ -33,10 +62,10 @@ int main(){
     std::cout << "active Project: " << list2.active_project_id << std::endl;
     std::cout << "Name of active proj: " << list2.projects[list2.active_project_id].name << std::endl;
     std::cout << list2.active_project->name << std::endl;
-    //std::cout << "Name of active task: " << list2.projects[list2.active_project_id].tasks[list2.projects[list2.active_project_id].active_task_id].name << std::endl;
     std::cout << list2.active_project->active_task->name << std::endl;
     std::cout << list2.active_project->active_task->work_time << std::endl;
-    //std::cout << "Work time of this task: " << list2.projects[list2.active_project_id].tasks[list2.projects[list2.active_project_id].active_task_id].work_time << std::endl;
-    //std::cout << list2.active_project->active_task->work_time << std::endl;
+    
+    track(list2.active_project);
+
     return 0;
 }

@@ -109,14 +109,9 @@ void ProjectList::load(std::string file_name){
             task.add_time(work_time);
             proj.add_task(task);   
         }
-        //proj.active_task_id = active_t;
-        //proj.set_active_task(active_t);
-        //proj.set_active_task(active_t);
         active_task_arr[i] = active_t;
         add_project(proj);
-        //active_project->set_active_task(active_t);
     }
-    //active_project_id = active;
     set_active_project(active);
     for (int i=0; i<np ; i++){
         projects[i].set_active_task(active_task_arr[i]);

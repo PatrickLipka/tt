@@ -11,5 +11,4 @@ class Task{
         int work_time;
         void add_time(int seconds);
 };
-
 #endif
