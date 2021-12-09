@@ -13,7 +13,9 @@ class Project{
         std::vector<Task> tasks;
         void add_task(Task task);
         void remove_task(int id);
-        int active_task;
+        int active_task_id;
+        Task *active_task;
+        void set_active_task(int id);
 };
 
 class ProjectList{
@@ -22,7 +24,9 @@ class ProjectList{
         std::vector<Project> projects;
         void add_project(Project proj);
         void remove_project(int id);
-        int active_project;
+        int active_project_id;
+        Project *active_project;
+        void set_active_project(int id);
         void save(std::string file_name);
         void load(std::string file_name);
 };
