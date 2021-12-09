@@ -3,6 +3,8 @@
 #include "track.h"
 #include "project.h"
 
+int sigint;
+
 void handler(int signum){
     sigint = 1;
     std::cout << std::endl;
