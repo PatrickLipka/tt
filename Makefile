@@ -22,7 +22,7 @@ makedir:
 all: $(BIN_PATH)/tt
 
 clean:
-	@rm -rf $(SRC)/*.o
-	@rm -rf $(BIN)/tt
+	@rm -rf $(SRC_PATH)/*.o
+	@rm -rf $(BIN_PATH)/tt
 
 .PHONY: makedir clean
