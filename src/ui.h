@@ -12,4 +12,12 @@ char **tt_name_completion(const char* text, int start, int end);
 char *tt_name_generator(const char *text, int state);
 void init_autocomplete(ProjectList *proj_list);
 std::string space_to_underscore(std::string);
+std::string underscore_to_space(std::string);
+
+void parse_input(std::string input, ProjectList *proj_list);
+
+// command definitions
+void command_ls(std::string input, ProjectList *proj_list);
+void command_start(std::string input, ProjectList *proj_list);
+
 #endif

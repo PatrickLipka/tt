@@ -16,10 +16,14 @@ class Project{
         int active_task_id;
         Task *active_task;
         void set_active_task(int id);
+        Task *find_task_by_name(std::string task_name);
+        int find_task_id_by_name(std::string task_name);
 };
 
 class ProjectList{
     public:
+        ProjectList(std::string month);
+        std::string month;
         int num_projects;
         std::vector<Project> projects;
         void add_project(Project proj);
@@ -29,6 +33,9 @@ class ProjectList{
         void set_active_project(int id);
         void save(std::string file_name);
         void load(std::string file_name);
+        Project *find_project_by_name(std::string proj_name);
+        int find_project_id_by_name(std::string proj_name);
+
 };
 
 #endif

@@ -27,6 +27,36 @@ void Project::set_active_task(int id){
     active_task = &tasks[id];
 }
 
+Task* Project::find_task_by_name(std::string task_name){
+    for (int i=0; i<num_tasks; i++){
+        if(tasks[i].name == task_name){
+            return &(tasks[i]);
+        }else{
+            std::cout << "Task " << task_name << " not found in project " << name << std::endl;;
+        }
+    }
+    return NULL;
+}
+
+int Project::find_task_id_by_name(std::string task_name){
+    for (int i=0; i<num_tasks; i++){
+        if(tasks[i].name == task_name){
+            return i;
+       }
+    }
+    std::cout << "Task " << task_name << " not found in project " << name << std::endl;
+    return -1;
+}
+
+
+
+// ProjectList definitions:
+
+ProjectList::ProjectList(std::string month){
+    ProjectList::month = month;
+    ProjectList::num_projects = 0;
+}
+
 void ProjectList::add_project(Project proj){
     projects.push_back(proj);
     set_active_project(num_projects);
@@ -119,4 +149,26 @@ void ProjectList::load(std::string file_name){
     }
     delete [] active_task_arr;
     inf.close();
+}
+
+Project* ProjectList::find_project_by_name(std::string proj_name){
+    std::cout << proj_name <<std::endl;
+    for (int i=0; i<num_projects; i++){
+        if(projects[i].name == proj_name){
+            return &(projects[i]);
+        }else{
+            std::cout << "Project " << proj_name << " not found in projects list" << std::endl;
+        }
+    }
+    return NULL;
+}
+
+int ProjectList::find_project_id_by_name(std::string proj_name){
+    for (int i=0; i<num_projects; i++){
+        if(projects[i].name == proj_name){
+            return i;
+        }
+    }
+    std::cout << "Project " << proj_name << " not found in projects list" << std::endl;
+    return -1;
 }
