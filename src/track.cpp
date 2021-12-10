@@ -26,6 +26,6 @@ void track(Project *proj){
     work_h = (worktime % 86400) / 3600;
     work_m = (worktime % 3600) / 60;
     work_s = worktime % 60;
-    // TODO: replace with proper cout call
+    
     printf("Time worked on project: %02d:%02d:%02d\n", work_h,work_m,work_s );
 }

@@ -109,6 +109,7 @@ void ProjectList::load(std::string file_name){
             task.add_time(work_time);
             proj.add_task(task);   
         }
+        // needed to get the active_task pointers right _after_ adding tasks to projetcs
         active_task_arr[i] = active_t;
         add_project(proj);
     }
