@@ -152,12 +152,9 @@ void ProjectList::load(std::string file_name){
 }
 
 Project* ProjectList::find_project_by_name(std::string proj_name){
-    std::cout << proj_name <<std::endl;
     for (int i=0; i<num_projects; i++){
         if(projects[i].name == proj_name){
             return &(projects[i]);
-        }else{
-            std::cout << "Project " << proj_name << " not found in projects list" << std::endl;
         }
     }
     return NULL;
@@ -169,6 +166,5 @@ int ProjectList::find_project_id_by_name(std::string proj_name){
             return i;
         }
     }
-    std::cout << "Project " << proj_name << " not found in projects list" << std::endl;
     return -1;
 }

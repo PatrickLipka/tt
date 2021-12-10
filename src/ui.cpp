@@ -77,42 +77,62 @@ void init_autocomplete(ProjectList *proj_list){
 }
 
 void parse_input(std::string input, ProjectList *proj_list){
-    if(input.find("ls") != std::string::npos){
-        if (input.length()>2){
-            command_ls(input.substr(3),proj_list);
-        }else{
+    size_t command_end = input.find(" ");
+    std::string command = input.substr(0,command_end);
+    std::string argument = input.substr(command_end+1); 
+
+    if (command == "ls"){
+        if (command_end == std::string::npos){
             command_ls("",proj_list);
-        }
-    } else if(input.find("start") != std::string::npos){
-        if (input.length()>5){
-            command_start(input.substr(6),proj_list);
         }else{
+            command_ls(argument,proj_list);
+        }
+    }else if (command == "start"){
+        if (command_end == std::string::npos){
             command_start("",proj_list);
+        }else{
+            command_start(argument,proj_list);
+        }
+            
+    }else if (command == "np"){
+        if (command_end == std::string::npos){
+            std::cout << "new peoject: Please specify project name." << std::endl;
+        }else{
+            command_np(argument,proj_list);
         }
     }
 }
 
-
+// list projects/tasks
 void command_ls(std::string input, ProjectList *proj_list){
     std::string str = input;
     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
-
     if (str.length() == 0){
         // list projects
+        std::string active_proj_str = proj_list->active_project->name;
+        if(proj_list->active_project->num_tasks > 0) active_proj_str += "/" + proj_list->active_project->active_task->name;
+        std::cout << "Active Project/Task: " << active_proj_str << std::endl;
+        std::cout << std::endl;
         std::cout << "List of Projects:" << std::endl;
         for (int i=0; i<proj_list->num_projects; i++){
             std::cout << proj_list->projects[i].name << std::endl;
         }
+        std::cout << std::endl;
     }else{
         // list tasks for given project
         Project *proj = proj_list->find_project_by_name(underscore_to_space(str));
-        std::cout << "List of Tasks for Project " << proj->name << ":" << std::endl;
-        for(int j=0; j<proj->num_tasks; j++){
-            std::cout << proj->tasks[j].name << std::endl;
+        if(proj == NULL){
+            std::cout << "Project " << str << " does not exists." << std::endl;
+        }else{
+            std::cout << "List of Tasks for Project " << proj->name << ":" << std::endl;
+            for(int j=0; j<proj->num_tasks; j++){
+                std::cout << proj->tasks[j].name << std::endl;
+            }       
         }
     }
 }
 
+// start tracking of active project or specific project
 void command_start(std::string input, ProjectList *proj_list){
     std::string str = input;
     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
@@ -133,5 +153,17 @@ void command_start(std::string input, ProjectList *proj_list){
             std::cout << "now active: "<< proj->active_task->name << std::endl;
             track(proj);
         }
+    }
+}
+
+// create new project
+void command_np(std::string name, ProjectList *proj_list){
+    if (proj_list->find_project_id_by_name(name) == -1){
+        Project proj(name); 
+        std::string auto_complete_str = space_to_underscore(name);
+        autocomplete_names.push_back(auto_complete_str);
+        proj_list->add_project(proj);
+    }else{
+        std::cout << "A project with the name " << name << " already exists." << std::endl;
     }
 }
