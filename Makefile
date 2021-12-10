@@ -1,6 +1,7 @@
 CXX ?= g++
 CXXFLAGS := -g -Wall -pedantic
 OBJFLAGS := $(CXXFLAGS) -c
+LDFLAGS := -lreadline
 
 BIN_PATH := bin
 SRC_PATH := src
@@ -11,7 +12,7 @@ OBJ := $(addprefix $(SRC_PATH)/, $(addsuffix .o, $(notdir $(basename $(SRC)))))
 default: makedir all
 
 $(BIN_PATH)/tt: $(OBJ)
-	$(CXX) $(CXXFLAGS) -o $@ $(OBJ)
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJ) $(LDFLAGS)
 
 $(SRC_PATH)/%.o: $(SRC_PATH)/%.cpp
 	$(CXX) $(OBJFLAGS) -o $@ $<

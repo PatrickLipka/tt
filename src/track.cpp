@@ -4,10 +4,15 @@
 #include "project.h"
 
 int sigint;
+int tracking;
 
 void handler(int signum){
-    sigint = 1;
-    std::cout << std::endl;
+    if (tracking){
+        sigint = 1;
+        std::cout << std::endl;
+    } else {
+        exit(0);
+    }
 }
 
 void track(Project *proj){
@@ -16,8 +21,11 @@ void track(Project *proj){
     time_t start;
     system("clear");
     time(&start);
+    tracking = 1;
     std::cout << "Started tracking of task " << proj->name << "/" << proj->active_task->name << " at " << ctime(&start) << std::endl;
     sigint = 0;
+
+    // will be interrupted by signal handler in case of SIGINT (CTRL-C)
     while (!sigint){
         sleep(1);
         worktime += 1;
@@ -28,4 +36,5 @@ void track(Project *proj){
     work_s = worktime % 60;
     
     printf("Time worked on project: %02d:%02d:%02d\n", work_h,work_m,work_s );
+    tracking = 0;
 }
