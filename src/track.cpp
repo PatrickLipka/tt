@@ -23,6 +23,7 @@ void track(Project *proj){
     time(&start);
     tracking = 1;
     std::cout << "Started tracking of task " << proj->name << "/" << proj->active_task->name << " at " << ctime(&start) << std::endl;
+    std::cout << "Press CTRL-C to stop tracking" << std::endl;
     sigint = 0;
 
     // will be interrupted by signal handler in case of SIGINT (CTRL-C)

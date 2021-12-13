@@ -20,4 +20,6 @@ void parse_input(std::string input, ProjectList *proj_list);
 void command_ls(std::string input, ProjectList *proj_list);
 void command_start(std::string input, ProjectList *proj_list);
 void command_np(std::string name, ProjectList *proj_list);
+void command_nt(std::string input, ProjectList *proj_list);
+void command_sp(std::string name, ProjectList *proj_list);
 #endif

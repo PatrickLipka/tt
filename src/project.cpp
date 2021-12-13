@@ -31,8 +31,6 @@ Task* Project::find_task_by_name(std::string task_name){
     for (int i=0; i<num_tasks; i++){
         if(tasks[i].name == task_name){
             return &(tasks[i]);
-        }else{
-            std::cout << "Task " << task_name << " not found in project " << name << std::endl;;
         }
     }
     return NULL;
@@ -44,7 +42,6 @@ int Project::find_task_id_by_name(std::string task_name){
             return i;
        }
     }
-    std::cout << "Task " << task_name << " not found in project " << name << std::endl;
     return -1;
 }
 
