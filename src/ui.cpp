@@ -7,7 +7,9 @@
 #include "ui.h"
 #include "project.h"
 #include "track.h"
-// Use GNU readline library for autocompletion and command history
+#include "string_utils.h"
+
+// Uses GNU readline library for autocompletion and command history
 
 std::string command_names[num_commands]={
     "np",
@@ -16,7 +18,7 @@ std::string command_names[num_commands]={
     "st",
     "at",
     "rt",
-    "re"
+    "re",
     "rm",
     "report",
     "ls",
@@ -45,20 +47,6 @@ char *tt_name_generator(const char *text, int state){
         }
     }
     return NULL;
-}
-
-std::string space_to_underscore(std::string str){
-    for(size_t i = 0; i < str.length(); i++){
-        if(str[i] == ' ') str[i] = '_';
-    }
-    return str;
-}
-
-std::string underscore_to_space(std::string str){
-    for(size_t i = 0; i < str.length(); i++){
-        if(str[i] == '_') str[i] = ' ';
-    }
-    return str;
 }
 
 void init_autocomplete(ProjectList *proj_list){
@@ -153,7 +141,7 @@ void command_ls(std::string input, ProjectList *proj_list){
         std::cout << std::endl;
     }else{
         // list tasks for given project
-        Project *proj = proj_list->find_project_by_name(underscore_to_space(str));
+        Project *proj = proj_list->find_project_by_name(trim(underscore_to_space(str)));
         if(proj == NULL){
             std::cout << "Project " << str << " does not exists." << std::endl;
         }else{
@@ -178,12 +166,12 @@ void command_start(std::string input, ProjectList *proj_list){
         int place_of_slash = str.find("/");
         std::string proj_name = str.substr(0,place_of_slash);
         std::string task_name = str.substr(place_of_slash+1);
-        Project *proj = proj_list->find_project_by_name(underscore_to_space(proj_name));
+        Project *proj = proj_list->find_project_by_name(trim(underscore_to_space(proj_name)));
         if (proj == NULL){
             std::cout << "Project " << underscore_to_space(proj_name) << " does not exist." << std::endl;
             return;
         }
-        int id=proj->find_task_id_by_name(underscore_to_space(task_name));
+        int id=proj->find_task_id_by_name(trim(underscore_to_space(task_name)));
         if(id >= 0){
             std::cout << "id=" << id << std::endl;
             proj->set_active_task(id);
@@ -197,7 +185,7 @@ void command_start(std::string input, ProjectList *proj_list){
 
 // create new project
 void command_np(std::string name, ProjectList *proj_list){
-    if (proj_list->find_project_id_by_name(underscore_to_space(name)) == -1){
+    if (proj_list->find_project_id_by_name(trim(underscore_to_space(name))) == -1){
         Project proj(underscore_to_space(name)); 
         std::string auto_complete_str = space_to_underscore(name);
         autocomplete_names.push_back(auto_complete_str);
@@ -213,8 +201,8 @@ void command_rm(std::string input, ProjectList *proj_list){
     size_t place_of_slash = input.find("/");
     std::string proj_name = input.substr(0,place_of_slash);
     std::string task_name = input.substr(place_of_slash+1);
-    int id = proj_list->find_project_id_by_name(underscore_to_space(proj_name));
-    Project *proj = proj_list->find_project_by_name(underscore_to_space(proj_name));
+    int id = proj_list->find_project_id_by_name(trim(underscore_to_space(proj_name)));
+    Project *proj = proj_list->find_project_by_name(trim(underscore_to_space(proj_name)));
     if (proj == NULL){
         proj = proj_list->active_project;
     }
@@ -256,7 +244,7 @@ void command_rm(std::string input, ProjectList *proj_list){
              }
         }        
     }else{
-        int task_id = proj_list->active_project->find_task_id_by_name(underscore_to_space(task_name));
+        int task_id = proj_list->active_project->find_task_id_by_name(trim(underscore_to_space(task_name)));
         if (task_id >=0){
             del = false;
             std::cout << "Do you really want to remove task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << "? [y|n]" << std::endl;
@@ -299,7 +287,7 @@ void command_nt(std::string input, ProjectList *proj_list){
     size_t place_of_slash = input.find("/");
     std::string proj_name = input.substr(0,place_of_slash);
     std::string task_name = input.substr(place_of_slash+1);
-    Project *proj = proj_list->find_project_by_name(underscore_to_space(proj_name));
+    Project *proj = proj_list->find_project_by_name(trim(underscore_to_space(proj_name)));
     if (place_of_slash == std::string::npos){
         proj = proj_list->active_project;
     }
@@ -307,7 +295,7 @@ void command_nt(std::string input, ProjectList *proj_list){
         std::cout << "Project " << underscore_to_space(proj_name) << " does not exist." << std::endl;
         return;
     }
-    int id = proj->find_task_id_by_name(underscore_to_space(task_name));
+    int id = proj->find_task_id_by_name(trim(underscore_to_space(task_name)));
     if (id < 0){
         Task task(task_name);
         proj->add_task(task);
@@ -322,7 +310,7 @@ void command_nt(std::string input, ProjectList *proj_list){
 
 // switch project
 void command_sp(std::string name, ProjectList *proj_list){
-    int id = proj_list->find_project_id_by_name(underscore_to_space(name));
+    int id = proj_list->find_project_id_by_name(trim(underscore_to_space(name)));
     if (id >= 0){
         proj_list->set_active_project(id);
         std::cout << "Switched to project " << underscore_to_space(name) << std::endl;
@@ -336,17 +324,17 @@ void command_st(std::string input, ProjectList *proj_list){
    size_t place_of_slash = input.find("/");
    std::string proj_name = input.substr(0,place_of_slash);
    std::string task_name = input.substr(place_of_slash+1);
-   int proj_id = proj_list->find_project_id_by_name(underscore_to_space(proj_name));
-   Project *proj = proj_list->find_project_by_name(underscore_to_space(proj_name));
+   int proj_id = proj_list->find_project_id_by_name(trim(underscore_to_space(proj_name)));
+   Project *proj = proj_list->find_project_by_name(trim(underscore_to_space(proj_name)));
    if (place_of_slash == std::string::npos){
         proj = proj_list->active_project;
-        proj_id = proj_list->find_project_id_by_name(underscore_to_space(proj_list->active_project->name));
+        proj_id = proj_list->find_project_id_by_name(trim(underscore_to_space(proj_list->active_project->name)));
    }
    if (proj == NULL){
         std::cout << "Project " << underscore_to_space(proj_name) << " does not exist." << std::endl;
         return;
    }
-   int task_id = proj->find_task_id_by_name(underscore_to_space(task_name));
+   int task_id = proj->find_task_id_by_name(trim(underscore_to_space(task_name)));
    if (task_id >= 0){
         proj_list->set_active_project(proj_id);
         proj->set_active_task(task_id);
@@ -362,8 +350,8 @@ void command_re(std::string input, std::string new_name, ProjectList *proj_list)
     size_t place_of_slash = input.find("/");
     std::string proj_name = input.substr(0,place_of_slash);
     std::string task_name = input.substr(place_of_slash+1);
-    int id = proj_list->find_project_id_by_name(underscore_to_space(proj_name));
-    Project *proj = proj_list->find_project_by_name(underscore_to_space(proj_name));
+    int id = proj_list->find_project_id_by_name(trim(underscore_to_space(proj_name)));
+    Project *proj = proj_list->find_project_by_name(trim(underscore_to_space(proj_name)));
     if (proj == NULL){
         proj = proj_list->active_project;
     }
@@ -388,7 +376,7 @@ void command_re(std::string input, std::string new_name, ProjectList *proj_list)
         proj->name = underscore_to_space(new_name);
         std::cout << "Renamed  project " << old_name << " to " << proj->name << std::endl;
     }else{
-        int task_id = proj_list->active_project->find_task_id_by_name(underscore_to_space(task_name));
+        int task_id = proj_list->active_project->find_task_id_by_name(trim(underscore_to_space(task_name)));
         if (task_id >=0){
             proj->tasks[task_id].name = underscore_to_space(new_name);
                 
