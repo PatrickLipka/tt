@@ -26,6 +26,6 @@ void command_sp(std::string name, ProjectList *proj_list);
 void command_st(std::string input, ProjectList *proj_list);
 void command_nt(std::string input, ProjectList *proj_list);
 void command_re(std::string input, std::string new_name,  ProjectList *proj_lits);
-void command_at(std::string input, ProjectList *proj_list);
-void command_rt(std::string input, ProjectList *proj_list);
+void command_at(std::string input, int wtime, ProjectList *proj_list);
+void command_rt(std::string input, int wtime, ProjectList *proj_list);
 #endif

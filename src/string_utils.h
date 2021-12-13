@@ -5,5 +5,5 @@
 std::string trim(const std::string &str);
 std::string space_to_underscore(std::string str);
 std::string underscore_to_space(std::string str);
-
+bool is_num(const std::string &str);
 #endif

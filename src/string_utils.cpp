@@ -15,10 +15,16 @@ std::string underscore_to_space(std::string str){
     return str;
 }
 
-std::string trim(const std::string& str)
-{
+std::string trim(const std::string& str){
     const char* WhiteSpace = " ";
     std::size_t start = str.find_first_not_of(WhiteSpace);
     std::size_t end = str.find_last_not_of(WhiteSpace);
     return start == end ? std::string() : str.substr(start, end - start + 1);
+}
+
+bool is_num(const std::string &str){
+    for (const char &c : str){
+        if (std::isdigit(c) == 0) return false;
+    }
+    return true;
 }
