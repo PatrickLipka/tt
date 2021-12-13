@@ -3,6 +3,7 @@
 #include <string>
 #include <readline/readline.h>
 #include <readline/history.h>
+#include <algorithm>
 #include "ui.h"
 #include "project.h"
 #include "track.h"
@@ -15,6 +16,7 @@ std::string command_names[num_commands]={
     "st",
     "at",
     "rt",
+    "re"
     "rm",
     "report",
     "ls",
@@ -100,11 +102,11 @@ void parse_input(std::string input, ProjectList *proj_list){
         }else{
             command_np(argument,proj_list);
         }
-    }else if (command == "rp"){
+    }else if (command == "rm"){
         if (command_end == std::string::npos){
-            std::cout << "remove project: Please specify project name." << std::endl;
+            std::cout << "remove: Please specify project or task name." << std::endl;
         }else{
-            command_rp(argument,proj_list);
+            command_rm(argument,proj_list);
         }
     }else if (command == "nt"){
         if (command_end == std::string::npos){
@@ -129,12 +131,13 @@ void parse_input(std::string input, ProjectList *proj_list){
 
 // list projects/tasks
 void command_ls(std::string input, ProjectList *proj_list){
+    std::string active_proj_str="";
     std::string str = input;
     str.erase(std::remove(str.begin(), str.end(), ' '), str.end());
     if (str.length() == 0){
         // list projects
-        std::string active_proj_str = proj_list->active_project->name;
-        if(proj_list->active_project->num_tasks > 0) active_proj_str += "/" + proj_list->active_project->active_task->name;
+        if(proj_list->num_projects > 0) active_proj_str = proj_list->active_project->name;
+        if(proj_list->num_projects > 0 && proj_list->active_project->num_tasks > 0) active_proj_str += "/" + proj_list->active_project->active_task->name;
         std::cout << "Active Project/Task: " << active_proj_str << std::endl;
         std::cout << std::endl;
         std::cout << "List of Projects:" << std::endl;
@@ -199,13 +202,20 @@ void command_np(std::string name, ProjectList *proj_list){
     }
 }
 
-// remove project
-void command_rp(std::string name, ProjectList *proj_list){
-    int id = proj_list->find_project_id_by_name(underscore_to_space(name));
-    if (id >= 0){
-        std::cout << "Do you really want to delete project " << underscore_to_space(name) << "? [y|n]" << std::endl;
+// remove project/task
+void command_rm(std::string input, ProjectList *proj_list){
+    size_t place_of_slash = input.find("/");
+    std::string proj_name = input.substr(0,place_of_slash);
+    std::string task_name = input.substr(place_of_slash+1);
+    int id = proj_list->find_project_id_by_name(underscore_to_space(proj_name));
+    Project *proj = proj_list->find_project_by_name(underscore_to_space(proj_name));
+    if (proj == NULL){
+        proj = proj_list->active_project;
+    }
+    bool del = false;
+    if (place_of_slash == std::string::npos && id >= 0){
+        std::cout << "Do you really want to remove project " << underscore_to_space(proj_name) << "? [y|n]" << std::endl;
         std::string input;
-        bool del=false;
         while(1){
             std::cin >> input;
             if (input == "Y" || input == "y"){
@@ -218,15 +228,67 @@ void command_rp(std::string name, ProjectList *proj_list){
                 std::cout << "[y|n]? ";
             }
         }
-        if(del){
+        if(del){ 
+
+            // also remove project with all tasks from auto completion
+            auto find_id = std::find(autocomplete_names.begin(), autocomplete_names.end(),space_to_underscore(proj_name));
+            if (find_id != autocomplete_names.end()){
+                autocomplete_names.erase(find_id);
+                for (int i=0; i<proj->num_tasks; i++){
+                    std::string tmp = space_to_underscore(proj->name)+"/"+space_to_underscore(proj->tasks[i].name);
+                    
+                    auto find_task_id = std::find(autocomplete_names.begin(), autocomplete_names.end(),tmp);
+                    if (find_task_id !=  autocomplete_names.end()){
+                        autocomplete_names.erase(find_task_id);
+                        
+                    }
+                }
+            }
             proj_list->remove_project(id);
-            std::cout << "Removed project " << underscore_to_space(name) << "." << std::endl;
+            std::cout << "Removed project " << underscore_to_space(proj_name) << "." << std::endl;
+
             if (proj_list->num_projects > 0) {
                 std::cout << "Switched to project " << proj_list->active_project->name << std::endl;
              }
+
         }        
     }else{
-        std::cout << "Project " << name << " does not exist." << std::endl;
+        int task_id = proj_list->active_project->find_task_id_by_name(underscore_to_space(task_name));
+        if (task_id >=0){
+            del = false;
+            std::cout << "Do you really want to remove task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << "? [y|n]" << std::endl;
+            std::string input;
+            while(1){
+                std::cin >> input;
+                if (input == "Y" || input == "y"){
+                    del = true;
+                    break;
+                }else if( input == "n" || input == "N" ){
+                    del = false;
+                    break;
+                }else{
+                    std::cout << "[y|n]? ";
+                }
+            }
+            if(del){
+                proj->remove_task(task_id);
+
+                // also remove task from auto completion
+                std::string tmp = space_to_underscore(proj->name)+"/"+space_to_underscore(task_name);
+                auto find_id = std::find(autocomplete_names.begin(), autocomplete_names.end(),tmp);
+                if (find_id !=  autocomplete_names.end()){
+                    autocomplete_names.erase(find_id);
+                }
+
+                std::cout << "Removed  task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << std::endl;
+                if (proj->num_tasks > 0) {
+                    std::cout << "Switched to task " << underscore_to_space(proj->name) << "/" << underscore_to_space(proj->active_task->name) << std::endl;
+                 }
+            }        
+
+        }else{
+            std::cout << "Task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << " does not exist." << std::endl;
+        }
     }
 }
 
