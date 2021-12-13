@@ -100,6 +100,12 @@ void parse_input(std::string input, ProjectList *proj_list){
         }else{
             command_np(argument,proj_list);
         }
+    }else if (command == "rp"){
+        if (command_end == std::string::npos){
+            std::cout << "remove project: Please specify project name." << std::endl;
+        }else{
+            command_rp(argument,proj_list);
+        }
     }else if (command == "nt"){
         if (command_end == std::string::npos){
             std::cout << "new task: Please specify task name." << std::endl;
@@ -193,6 +199,39 @@ void command_np(std::string name, ProjectList *proj_list){
     }
 }
 
+// remove project
+void command_rp(std::string name, ProjectList *proj_list){
+    int id = proj_list->find_project_id_by_name(underscore_to_space(name));
+    if (id >= 0){
+        std::cout << "Do you really want to delete project " << underscore_to_space(name) << "? [y|n]" << std::endl;
+        std::string input;
+        bool del=false;
+        while(1){
+            std::cin >> input;
+            if (input == "Y" || input == "y"){
+                del = true;
+                break;
+            }else if( input == "n" || input == "N" ){
+                del = false;
+                break;
+            }else{
+                std::cout << "[y|n]? ";
+            }
+        }
+        if(del){
+            proj_list->remove_project(id);
+            std::cout << "Removed project " << underscore_to_space(name) << "." << std::endl;
+            if (proj_list->num_projects > 0) {
+                std::cout << "Switched to project " << proj_list->active_project->name << std::endl;
+             }
+        }        
+    }else{
+        std::cout << "Project " << name << " does not exist." << std::endl;
+    }
+}
+
+
+
 // create new task
 void command_nt(std::string input, ProjectList *proj_list){
     size_t place_of_slash = input.find("/");
@@ -250,7 +289,7 @@ void command_st(std::string input, ProjectList *proj_list){
    if (task_id >= 0){
         proj_list->set_active_project(proj_id);
         proj->set_active_task(task_id);
-        std::cout << "Switched to task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name << std::endl << std::endl;
+        std::cout << "Switched to task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name << std::endl;
    }else{
        std::string str = underscore_to_space(proj->name)+"/"+underscore_to_space(task_name);
        std::cout << "Task " << str << " does not exist." << std::endl;
