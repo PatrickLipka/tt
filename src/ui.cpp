@@ -140,11 +140,29 @@ void parse_input(std::string input, ProjectList *proj_list){
             }
         }
         
+    }else if (command == "rt"){
+        if (command_end == std::string::npos){
+            std::cout << "remove time: please specify time to remove and task name [optional]." << std::endl;
+        }else{
+            // only 1 argument
+            if(is_num(trim(argument))){
+                command_rt("",stoi(argument),proj_list);
+            }else{
+                size_t start_of_name = argument.find(" ");
+                std::string wtime_str = argument.substr(0,start_of_name);
+                std::string task_name = argument.substr(start_of_name+1);
+                if (is_num(wtime_str) && start_of_name != std::string::npos){
+                    command_rt(task_name,stoi(wtime_str),proj_list);
+                }else{
+                    std::cout << "remove time: please specify time to remove and task name [optional]." << std::endl;
+                }
+                                                                                                                
+            }
+        }
     }
 }
 
-
-    // list projects/tasks
+// list projects/tasks
 void command_ls(std::string input, ProjectList *proj_list){
     std::string active_proj_str="";
     std::string str = input;
@@ -430,10 +448,7 @@ void command_at(std::string input, int wtime, ProjectList *proj_list){
             return;
         }else{
             // add time to task in same project
-            std::cout << "adding time to task in same proj" << std::endl;
-            std::cout << "try to find task " << trim(underscore_to_space(proj_name)) << std::endl;
             int id=proj_list->active_project->find_task_id_by_name(trim(underscore_to_space(proj_name)));
-            std::cout << "id: " << id << std::endl;
             if (id >= 0){
                 proj_list->active_project->tasks[id].add_time(wtime);
                 std::cout << wtime << "s added to task " << proj_list->active_project->name << "/" << proj_list->active_project->tasks[id].name << std::endl;
@@ -458,3 +473,40 @@ void command_at(std::string input, int wtime, ProjectList *proj_list){
     }
 }
 
+// remove time to task
+void command_rt(std::string input, int wtime, ProjectList *proj_list){
+    size_t place_of_slash = input.find("/");
+    std::string proj_name = input.substr(0,place_of_slash);
+    std::string task_name = input.substr(place_of_slash+1);
+    Project *proj = proj_list->find_project_by_name(trim(underscore_to_space(proj_name)));
+    if(place_of_slash == std::string::npos){
+        if(proj_name.length()==0){
+            // add time to active task
+            proj_list->active_project->active_task->add_time(-wtime);
+            std::cout << wtime << "s removed from task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name  << std::endl;
+            return;
+        }else{
+            int id=proj_list->active_project->find_task_id_by_name(trim(underscore_to_space(proj_name)));
+            if (id >= 0){
+                proj_list->active_project->tasks[id].add_time(-wtime);
+                std::cout << wtime << "s removed from task " << proj_list->active_project->name << "/" << proj_list->active_project->tasks[id].name << std::endl;
+                return;
+            }else{
+                std::cout << "Task " << proj_list->active_project->name << "/" << proj_name << " does not exist." << std::endl;
+                return;
+            }
+                    
+        }
+    }
+    if (proj == NULL){
+        std::cout << "Project " << underscore_to_space(proj_name) << " does not exist." << std::endl;
+        return;
+    }
+    int id=proj->find_task_id_by_name(trim(underscore_to_space(task_name)));
+    if(id >= 0){
+        proj->tasks[id].add_time(wtime);
+        std::cout << wtime << "s removed from task " << proj->name << "/" << proj->tasks[id].name << std::endl;
+    }else{
+        std::cout << "Task " << underscore_to_space(input) << " does not exist." << std::endl;
+    }
+}
