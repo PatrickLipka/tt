@@ -22,4 +22,6 @@ void command_start(std::string input, ProjectList *proj_list);
 void command_np(std::string name, ProjectList *proj_list);
 void command_nt(std::string input, ProjectList *proj_list);
 void command_sp(std::string name, ProjectList *proj_list);
+void command_st(std::string input, ProjectList *proj_list);
+void command_nt(std::string input, ProjectList *proj_list);
 #endif
