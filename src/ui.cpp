@@ -95,7 +95,6 @@ void parse_input(std::string input, ProjectList *proj_list){
         }else{
             command_start(argument,proj_list);
         }
-            
     }else if (command == "np"){
         if (command_end == std::string::npos){
             std::cout << "new project: Please specify project name." << std::endl;
@@ -122,9 +121,16 @@ void parse_input(std::string input, ProjectList *proj_list){
         }
     }else if (command == "st"){
         if (command_end == std::string::npos){
-            std::cout << "switch task: Please verify task name." << std::endl;
+            std::cout << "switch task: Please specify task name." << std::endl;
         }else{
             command_st(argument, proj_list);
+        }
+    }else if (command == "re"){
+        if (command_end == std::string::npos){
+            std::cout << "rename: Please specify project or  task name." << std::endl;
+        }else{
+            size_t first_name_end = argument.find(" ");
+            command_re(argument.substr(0,first_name_end),argument.substr(first_name_end+1),proj_list);
         }
     }
 }
@@ -229,7 +235,6 @@ void command_rm(std::string input, ProjectList *proj_list){
             }
         }
         if(del){ 
-
             // also remove project with all tasks from auto completion
             auto find_id = std::find(autocomplete_names.begin(), autocomplete_names.end(),space_to_underscore(proj_name));
             if (find_id != autocomplete_names.end()){
@@ -240,7 +245,6 @@ void command_rm(std::string input, ProjectList *proj_list){
                     auto find_task_id = std::find(autocomplete_names.begin(), autocomplete_names.end(),tmp);
                     if (find_task_id !=  autocomplete_names.end()){
                         autocomplete_names.erase(find_task_id);
-                        
                     }
                 }
             }
@@ -250,7 +254,6 @@ void command_rm(std::string input, ProjectList *proj_list){
             if (proj_list->num_projects > 0) {
                 std::cout << "Switched to project " << proj_list->active_project->name << std::endl;
              }
-
         }        
     }else{
         int task_id = proj_list->active_project->find_task_id_by_name(underscore_to_space(task_name));
@@ -285,14 +288,11 @@ void command_rm(std::string input, ProjectList *proj_list){
                     std::cout << "Switched to task " << underscore_to_space(proj->name) << "/" << underscore_to_space(proj->active_task->name) << std::endl;
                  }
             }        
-
         }else{
             std::cout << "Task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << " does not exist." << std::endl;
         }
     }
 }
-
-
 
 // create new task
 void command_nt(std::string input, ProjectList *proj_list){
@@ -331,7 +331,6 @@ void command_sp(std::string name, ProjectList *proj_list){
     }
 }
 
-
 // switch task
 void command_st(std::string input, ProjectList *proj_list){
    size_t place_of_slash = input.find("/");
@@ -358,6 +357,51 @@ void command_st(std::string input, ProjectList *proj_list){
    }
 }
 
-
-
-
+// rename project / task
+void command_re(std::string input, std::string new_name, ProjectList *proj_list){
+    size_t place_of_slash = input.find("/");
+    std::string proj_name = input.substr(0,place_of_slash);
+    std::string task_name = input.substr(place_of_slash+1);
+    int id = proj_list->find_project_id_by_name(underscore_to_space(proj_name));
+    Project *proj = proj_list->find_project_by_name(underscore_to_space(proj_name));
+    if (proj == NULL){
+        proj = proj_list->active_project;
+    }
+    if (place_of_slash == std::string::npos && id >= 0){
+        // also edit auto completion
+        auto find_id = std::find(autocomplete_names.begin(), autocomplete_names.end(),space_to_underscore(proj_name));
+        if (find_id != autocomplete_names.end()){
+            autocomplete_names.erase(find_id);
+            autocomplete_names.push_back(space_to_underscore(new_name));
+             // also do rename for tasks
+            for (int i=0; i<proj->num_tasks; i++){
+                std::string tmp = space_to_underscore(proj->name)+"/"+space_to_underscore(proj->tasks[i].name);
+                std::string new_tmp = space_to_underscore(new_name)+"/"+space_to_underscore(proj->tasks[i].name);
+                auto find_task_id = std::find(autocomplete_names.begin(), autocomplete_names.end(),tmp);
+                if (find_task_id !=  autocomplete_names.end()){
+                    autocomplete_names.erase(find_task_id);
+                    autocomplete_names.push_back(new_tmp);
+                }
+            }
+        }
+        std::string old_name = proj_list->projects[id].name;
+        proj->name = underscore_to_space(new_name);
+        std::cout << "Renamed  project " << old_name << " to " << proj->name << std::endl;
+    }else{
+        int task_id = proj_list->active_project->find_task_id_by_name(underscore_to_space(task_name));
+        if (task_id >=0){
+            proj->tasks[task_id].name = underscore_to_space(new_name);
+                
+            // also edit auto completion
+            std::string tmp = space_to_underscore(proj->name)+"/"+space_to_underscore(task_name);
+            auto find_id = std::find(autocomplete_names.begin(), autocomplete_names.end(),tmp);
+            if (find_id !=  autocomplete_names.end()){
+                autocomplete_names.erase(find_id);
+                autocomplete_names.push_back(space_to_underscore(proj->name)+"/"+space_to_underscore(new_name));
+            }
+            std::cout << "Renamed task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << " to " << underscore_to_space(proj->name) << "/" << underscore_to_space(new_name) << std::endl;
+        }else{
+            std::cout << "Task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << " does not exist." << std::endl;
+        }
+    }
+}
