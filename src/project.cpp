@@ -8,6 +8,7 @@ Project::Project(std::string name){
     Project::name = name;    
     Project::num_tasks = 0;
     Project::active_task_id = 0;
+    Project::active_task = NULL;
 }
 
 void Project::add_task(Task task){
@@ -45,6 +46,13 @@ int Project::find_task_id_by_name(std::string task_name){
     return -1;
 }
 
+int Project::get_total_work_time(){
+   int wtime_proj = 0;
+   for (int i=0; i<num_tasks; i++){
+       wtime_proj += tasks[i].work_time;
+   }
+   return wtime_proj;
+}
 
 
 // ProjectList definitions:
@@ -57,6 +65,7 @@ ProjectList::ProjectList(std::string month){
 void ProjectList::add_project(Project proj){
     projects.push_back(proj);
     set_active_project(num_projects);
+    active_project->set_active_task(active_project->active_task_id);
     num_projects++;
 }
 
@@ -76,9 +85,10 @@ void ProjectList::save(std::string file_name){
     std::ofstream of(file_name, std::ios::binary);
     if (!of){
         std::cout << "Could not open file " << file_name << " for writing!" << std::endl;
-        exit(1);
+       // exit(1);
     }
     of.write((char*) &num_projects, sizeof(int));
+    std::cout << "Saving: num_projects=" << num_projects << std::endl;
     of.write((char*) &active_project_id, sizeof(int));
     for (int i=0; i<num_projects; i++){
         size_t len = projects[i].name.size();
@@ -101,9 +111,11 @@ void ProjectList::load(std::string file_name){
     int active;
     if (!inf){
         std::cout << "Could not open file " << file_name << " for reading!" << std::endl;
-        exit(1);
+        //exit(1);
     }
     inf.read((char*) &num_projects,sizeof(int));
+    std::cout << "Reading: num_projects=" << num_projects << std::endl;
+    int number_of_projects = num_projects;
     inf.read((char*) &active, sizeof(int));
     int np = num_projects;
     int *active_task_arr = new int[np];
@@ -146,6 +158,7 @@ void ProjectList::load(std::string file_name){
     }
     delete [] active_task_arr;
     inf.close();
+    num_projects = number_of_projects;
 }
 
 Project* ProjectList::find_project_by_name(std::string proj_name){

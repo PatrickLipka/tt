@@ -4,10 +4,13 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <algorithm>
+#include <ctime>
+#include <iomanip>
 #include "ui.h"
 #include "project.h"
 #include "track.h"
 #include "string_utils.h"
+#include "tt.h"
 
 // Uses GNU readline library for autocompletion and command history
 
@@ -22,7 +25,8 @@ std::string command_names[num_commands]={
     "rm",
     "report",
     "ls",
-    "start"
+    "start",
+    "save"
 };
 
 std::vector<std::string> autocomplete_names;
@@ -67,6 +71,7 @@ void init_autocomplete(ProjectList *proj_list){
 }
 
 void parse_input(std::string input, ProjectList *proj_list){
+    input = trim(input);
     size_t command_end = input.find(" ");
     std::string command = input.substr(0,command_end);
     std::string argument = input.substr(command_end+1); 
@@ -159,6 +164,14 @@ void parse_input(std::string input, ProjectList *proj_list){
                                                                                                                 
             }
         }
+    }else if (command == "report"){
+        if(command_end == std::string::npos){
+            command_report("",proj_list);
+        }else{
+            command_report(argument,proj_list);
+        }
+    }else if (command == "save"){
+        command_save(proj_list);
     }
 }
 
@@ -445,6 +458,7 @@ void command_at(std::string input, int wtime, ProjectList *proj_list){
             // add time to active task
             proj_list->active_project->active_task->add_time(wtime);
             std::cout << wtime << "s added to task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name  << std::endl;
+            std::cout << "New time: "<< proj_list->active_project->active_task->work_time << std::endl;
             return;
         }else{
             // add time to task in same project
@@ -509,4 +523,60 @@ void command_rt(std::string input, int wtime, ProjectList *proj_list){
     }else{
         std::cout << "Task " << underscore_to_space(input) << " does not exist." << std::endl;
     }
+}
+
+void command_report(std::string date_str, ProjectList* proj_list){
+    date_str = trim(date_str);
+    size_t place_of_minus = date_str.find("-");
+    std::string year = date_str.substr(0,place_of_minus);
+    std::string month = date_str.substr(place_of_minus+1);
+
+    if(date_str.length() == 0){
+        // report for current month
+        // get date:
+        std::string date = get_date();
+        std::cout << "Report for " << user_name << ", month: " << date << std::endl << std::endl;
+        
+        for (int i=0; i<proj_list->num_projects; i++){
+            // compute task and total times
+            Project *proj = &(proj_list->projects[i]);
+            float wtime_proj = proj->get_total_work_time() / 3600.0;
+            if(wtime_proj >= 0.01){
+                std::cout << "Project: " << proj->name << std::endl;
+                for(int j=0; j<proj->num_tasks; j++){
+                    float wtime_task = proj->tasks[j].work_time / 3600.0;
+                    if(wtime_task >= 0.01) std::cout << "--- " << proj->tasks[j].name << ": " << std::fixed << std::setprecision(2) << wtime_task << std::endl;
+                }
+                std::cout << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << std::endl << std::endl;
+            }
+        }
+    }else{
+        ProjectList *list = new ProjectList(month);
+        list->load(date_str);
+        if (list->num_projects > 0){
+            std::cout << "Report for " << user_name << ", month: " << date_str <<  std::endl << std::endl;
+            for (int i=0; i<list->num_projects; i++){
+                // compute task and total times
+                Project *proj = &(list->projects[i]);
+                float wtime_proj = proj->get_total_work_time() / 3600.0;
+                if(wtime_proj >= 0.01){
+                    std::cout << "Project: " << proj->name << std::endl;
+                    for(int j=0; j<proj->num_tasks; j++){
+                        float wtime_task = proj->tasks[j].work_time / 3600.0;
+                        if(wtime_task >= 0.01) std::cout << "--- " << proj->tasks[j].name << ": " << std::fixed << std::setprecision(2) << wtime_task << std::endl;
+                    }
+                    std::cout << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << std::endl << std::endl;
+                }
+            }
+        }else{
+            std::cout << "report: Project list is empty." << std::endl;
+        }
+    }
+}
+
+void command_save(ProjectList *proj_list){
+    std::string date_str = get_date();
+    std::string file_name = date_str;
+    proj_list->save(file_name);
+    std::cout << "Tracking data saved to file " << file_name << std::endl;
 }

@@ -8,5 +8,5 @@ Task::Task(std::string name){
 }
 
 void Task::add_time(int seconds){
-    Task::work_time = std::max(work_time+seconds,0); 
+    work_time = std::max(work_time+seconds,0); 
 }

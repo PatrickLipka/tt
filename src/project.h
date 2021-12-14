@@ -18,6 +18,7 @@ class Project{
         void set_active_task(int id);
         Task *find_task_by_name(std::string task_name);
         int find_task_id_by_name(std::string task_name);
+        int get_total_work_time();
 };
 
 class ProjectList{
@@ -34,8 +35,7 @@ class ProjectList{
         void save(std::string file_name);
         void load(std::string file_name);
         Project *find_project_by_name(std::string proj_name);
-        int find_project_id_by_name(std::string proj_name);
-
+        int find_project_id_by_name(std::string proj_name); 
 };
 
 #endif

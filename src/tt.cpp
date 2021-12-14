@@ -9,12 +9,30 @@
 #include "project.h"
 #include "track.h"
 #include "ui.h"
+#include "tt.h"
+
+std::string get_date(){
+    time_t t = time(NULL);
+    tm *date = localtime(&t);
+    int month = 5;//date->tm_mon+1;
+    int year  = date->tm_year+1900;
+    std::string month_str;
+    if (month < 10){
+        month_str = "0"+std::to_string(month);
+    }else{
+        month_str = std::to_string(month);
+    }
+    std::string date_str = std::to_string(year)+"-"+month_str;
+    return date_str;
+}
+std::string user_name;
 
 int main(){ 
     // connect SIGINT signal (CTRL-C) to signal handler from track.h to use it to stop tracking of projects
     signal(SIGINT, handler);
     tracking = 0;
-   
+    user_name = "Patrick";
+
     // TEST: set up test list
     ProjectList proj_list("dec");
     Project proj("Test Project");
@@ -22,8 +40,7 @@ int main(){
     proj.add_task(task1);
     proj.add_task(task2);
     proj.add_task(task3);
-    proj_list.add_project(proj);
-    
+    proj_list.add_project(proj); 
     init_autocomplete(&proj_list);
     // use GNU readline for auto completion and history when parsing command input
     while(1) {
