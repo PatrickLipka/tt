@@ -14,7 +14,7 @@
 std::string get_date(){
     time_t t = time(NULL);
     tm *date = localtime(&t);
-    int month = 5;//date->tm_mon+1;
+    int month = date->tm_mon+1;
     int year  = date->tm_year+1900;
     std::string month_str;
     if (month < 10){
@@ -40,7 +40,9 @@ int main(){
     proj.add_task(task1);
     proj.add_task(task2);
     proj.add_task(task3);
-    proj_list.add_project(proj); 
+    proj_list.add_project(proj);
+   // proj_list.load(get_date());
+
     init_autocomplete(&proj_list);
     // use GNU readline for auto completion and history when parsing command input
     while(1) {
@@ -54,6 +56,5 @@ int main(){
             free(buffer);
         }
     }
-
     return 0;
 }

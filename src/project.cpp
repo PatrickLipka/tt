@@ -65,7 +65,6 @@ ProjectList::ProjectList(std::string month){
 void ProjectList::add_project(Project proj){
     projects.push_back(proj);
     set_active_project(num_projects);
-    active_project->set_active_task(active_project->active_task_id);
     num_projects++;
 }
 
@@ -91,13 +90,13 @@ void ProjectList::save(std::string file_name){
     std::cout << "Saving: num_projects=" << num_projects << std::endl;
     of.write((char*) &active_project_id, sizeof(int));
     for (int i=0; i<num_projects; i++){
-        size_t len = projects[i].name.size();
+        size_t len = projects[i].name.length();
         of.write((char*) &len, sizeof(size_t));
         of.write((char*) projects[i].name.c_str(),len);
         of.write((char*) &(projects[i].num_tasks), sizeof(int));
         of.write((char*) &(projects[i].active_task_id), sizeof(int));
         for (int j=0; j<projects[i].num_tasks; j++){
-            size_t task_name_len = projects[i].tasks[j].name.size();
+            size_t task_name_len = projects[i].tasks[j].name.length();
             of.write((char*) &task_name_len, sizeof(size_t));
             of.write((char*) projects[i].tasks[j].name.c_str(), task_name_len);
             of.write((char*) &(projects[i].tasks[j].work_time), sizeof(int));
@@ -111,10 +110,8 @@ void ProjectList::load(std::string file_name){
     int active;
     if (!inf){
         std::cout << "Could not open file " << file_name << " for reading!" << std::endl;
-        //exit(1);
     }
     inf.read((char*) &num_projects,sizeof(int));
-    std::cout << "Reading: num_projects=" << num_projects << std::endl;
     int number_of_projects = num_projects;
     inf.read((char*) &active, sizeof(int));
     int np = num_projects;
@@ -131,6 +128,7 @@ void ProjectList::load(std::string file_name){
         Project proj(proj_name);
         delete [] tmp_name;
         inf.read((char*) &(proj.num_tasks), sizeof(int));
+        int number_of_tasks = proj.num_tasks;
         inf.read((char*) &active_t, sizeof(int));
         int nt = proj.num_tasks;
         for (int j=0; j<nt; j++){
@@ -139,17 +137,18 @@ void ProjectList::load(std::string file_name){
             inf.read((char*) &task_name_len, sizeof(size_t));
             char* tmp_task_name = new char[task_name_len+1];
             inf.read(tmp_task_name, task_name_len);
-            tmp_task_name[len] = '\0';
+            tmp_task_name[task_name_len] = '\0';
             task_name = tmp_task_name;
             delete [] tmp_task_name;
             Task task(task_name);
             int work_time=0;
             inf.read((char*) &(work_time), sizeof(int));
             task.add_time(work_time);
-            proj.add_task(task);   
+            proj.add_task(task);  
         }
         // needed to get the active_task pointers right _after_ adding tasks to projetcs
         active_task_arr[i] = active_t;
+        proj.num_tasks = number_of_tasks;
         add_project(proj);
     }
     set_active_project(active);

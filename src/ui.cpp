@@ -37,17 +37,14 @@ char **tt_name_completion(const char* text, int start, int end){
 
 char *tt_name_generator(const char *text, int state){
     static int idx, len;
-    const char* name;
-
+    const char *name;
     if (!state){
         idx = 0;
         len = strlen(text);
     }
-
     while ((name = autocomplete_names[idx++].c_str())){
         if (strncmp(name, text, len) == 0){
             return strdup(name);
-
         }
     }
     return NULL;
@@ -458,7 +455,6 @@ void command_at(std::string input, int wtime, ProjectList *proj_list){
             // add time to active task
             proj_list->active_project->active_task->add_time(wtime);
             std::cout << wtime << "s added to task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name  << std::endl;
-            std::cout << "New time: "<< proj_list->active_project->active_task->work_time << std::endl;
             return;
         }else{
             // add time to task in same project
@@ -551,13 +547,13 @@ void command_report(std::string date_str, ProjectList* proj_list){
             }
         }
     }else{
-        ProjectList *list = new ProjectList(month);
-        list->load(date_str);
-        if (list->num_projects > 0){
+        ProjectList list(month);
+        list.load(date_str);
+        if (list.num_projects > 0){
             std::cout << "Report for " << user_name << ", month: " << date_str <<  std::endl << std::endl;
-            for (int i=0; i<list->num_projects; i++){
+            for (int i=0; i<list.num_projects; i++){
                 // compute task and total times
-                Project *proj = &(list->projects[i]);
+                Project *proj = &(list.projects[i]);
                 float wtime_proj = proj->get_total_work_time() / 3600.0;
                 if(wtime_proj >= 0.01){
                     std::cout << "Project: " << proj->name << std::endl;
