@@ -210,6 +210,7 @@ void command_start(std::string input, ProjectList *proj_list){
     if (str.length() == 0){
         // start tracking for active task
         track(proj_list->active_project);
+        command_save(proj_list);
     }else{
         // change active task and start tracking
         int place_of_slash = str.find("/");
@@ -222,10 +223,9 @@ void command_start(std::string input, ProjectList *proj_list){
         }
         int id=proj->find_task_id_by_name(trim(underscore_to_space(task_name)));
         if(id >= 0){
-            std::cout << "id=" << id << std::endl;
             proj->set_active_task(id);
-            std::cout << "now active: "<< proj->active_task->name << std::endl;
             track(proj);
+            command_save(proj_list);
         }else{
             std::cout << "Task " << underscore_to_space(str) << " does not exist." << std::endl;
         }
@@ -287,6 +287,7 @@ void command_rm(std::string input, ProjectList *proj_list){
             }
             proj_list->remove_project(id);
             std::cout << "Removed project " << underscore_to_space(proj_name) << "." << std::endl;
+            command_save(proj_list);
 
             if (proj_list->num_projects > 0) {
                 std::cout << "Switched to project " << proj_list->active_project->name << std::endl;
@@ -321,6 +322,7 @@ void command_rm(std::string input, ProjectList *proj_list){
                 }
 
                 std::cout << "Removed  task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << std::endl;
+                command_save(proj_list);
                 if (proj->num_tasks > 0) {
                     std::cout << "Switched to task " << underscore_to_space(proj->name) << "/" << underscore_to_space(proj->active_task->name) << std::endl;
                  }
@@ -455,6 +457,7 @@ void command_at(std::string input, int wtime, ProjectList *proj_list){
             // add time to active task
             proj_list->active_project->active_task->add_time(wtime);
             std::cout << wtime << "s added to task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name  << std::endl;
+            command_save(proj_list);
             return;
         }else{
             // add time to task in same project
@@ -462,6 +465,7 @@ void command_at(std::string input, int wtime, ProjectList *proj_list){
             if (id >= 0){
                 proj_list->active_project->tasks[id].add_time(wtime);
                 std::cout << wtime << "s added to task " << proj_list->active_project->name << "/" << proj_list->active_project->tasks[id].name << std::endl;
+                command_save(proj_list);
                 return;
             }else{
                 std::cout << "Task " << proj_list->active_project->name << "/" << proj_name << " does not exist." << std::endl;
@@ -500,6 +504,7 @@ void command_rt(std::string input, int wtime, ProjectList *proj_list){
             if (id >= 0){
                 proj_list->active_project->tasks[id].add_time(-wtime);
                 std::cout << wtime << "s removed from task " << proj_list->active_project->name << "/" << proj_list->active_project->tasks[id].name << std::endl;
+                command_save(proj_list);
                 return;
             }else{
                 std::cout << "Task " << proj_list->active_project->name << "/" << proj_name << " does not exist." << std::endl;
@@ -516,6 +521,7 @@ void command_rt(std::string input, int wtime, ProjectList *proj_list){
     if(id >= 0){
         proj->tasks[id].add_time(wtime);
         std::cout << wtime << "s removed from task " << proj->name << "/" << proj->tasks[id].name << std::endl;
+        command_save(proj_list);
     }else{
         std::cout << "Task " << underscore_to_space(input) << " does not exist." << std::endl;
     }

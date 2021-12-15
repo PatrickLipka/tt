@@ -87,7 +87,6 @@ void ProjectList::save(std::string file_name){
        // exit(1);
     }
     of.write((char*) &num_projects, sizeof(int));
-    std::cout << "Saving: num_projects=" << num_projects << std::endl;
     of.write((char*) &active_project_id, sizeof(int));
     for (int i=0; i<num_projects; i++){
         size_t len = projects[i].name.length();
