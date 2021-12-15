@@ -455,6 +455,10 @@ void command_at(std::string input, int wtime, ProjectList *proj_list){
     if(place_of_slash == std::string::npos){
         if(proj_name.length()==0){
             // add time to active task
+            if(proj_list->active_project->active_task == NULL){
+                std::cout << "Task " << proj_list->active_project->name << "/" << proj_name << " does not exist." << std::endl;
+                return ;
+            }
             proj_list->active_project->active_task->add_time(wtime);
             std::cout << wtime << "s added to task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name  << std::endl;
             command_save(proj_list);
@@ -496,6 +500,10 @@ void command_rt(std::string input, int wtime, ProjectList *proj_list){
     if(place_of_slash == std::string::npos){
         if(proj_name.length()==0){
             // add time to active task
+            if(proj_list->active_project->active_task == NULL){
+                std::cout << "Task " << proj_list->active_project->name << "/" << proj_name << " does not exist." << std::endl;
+                return ;
+            }
             proj_list->active_project->active_task->add_time(-wtime);
             std::cout << wtime << "s removed from task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name  << std::endl;
             return;
