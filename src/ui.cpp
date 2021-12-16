@@ -7,6 +7,7 @@
 #include <ctime>
 #include <iomanip>
 #include <iterator>
+#include <unistd.h>
 #include "ui.h"
 #include "project.h"
 #include "track.h"
@@ -542,7 +543,6 @@ void command_report(std::string date_str, ProjectList* proj_list){
 
     if(date_str.length() == 0){
         // report for current month
-        // get date:
         std::string date = get_date();
         std::cout << "Report for " << user_name << ", month: " << date << std::endl << std::endl;
         
@@ -561,7 +561,8 @@ void command_report(std::string date_str, ProjectList* proj_list){
         }
     }else{
         ProjectList list(month);
-        list.load(date_str);
+        std::string file_name = tracking_dir+"/"+date_str;
+        list.load(file_name);
         if (list.num_projects > 0){
             std::cout << "Report for " << user_name << ", month: " << date_str <<  std::endl << std::endl;
             for (int i=0; i<list.num_projects; i++){
@@ -583,9 +584,12 @@ void command_report(std::string date_str, ProjectList* proj_list){
     }
 }
 
+// save project list to file - POSIX only
 void command_save(ProjectList *proj_list){
     std::string date_str = get_date();
-    std::string file_name = date_str;
+    std::string file_name = tracking_dir+"/"+date_str;
+    std::string command = "mkdir -p "+tracking_dir;
+    system (command.c_str());
     proj_list->save(file_name);
     std::cout << "Tracking data saved to file " << file_name << std::endl;
 }
