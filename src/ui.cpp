@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <ctime>
 #include <iomanip>
+#include <iterator>
 #include "ui.h"
 #include "project.h"
 #include "track.h"
@@ -36,18 +37,16 @@ char **tt_name_completion(const char* text, int start, int end){
 }
 
 char *tt_name_generator(const char *text, int state){
-    static int idx, len;
-    const char *name;
-    if (!state){
-        idx = 0;
-        len = strlen(text);
-    }
-    while ((name = autocomplete_names[idx++].c_str())){
-        if (strncmp(name, text, len) == 0){
-            return strdup(name);
-        }
-    }
-    return NULL;
+     static std::vector<std::string>::const_iterator it;
+     if (state == 0) it=begin(autocomplete_names);
+     while(it != end(autocomplete_names)){
+         std::string result = *it;
+         ++it;
+         if (result.find(text) != std::string::npos){
+             return strdup(result.c_str()); 
+         }
+     }
+     return NULL;
 }
 
 void init_autocomplete(ProjectList *proj_list){
