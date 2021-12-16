@@ -52,7 +52,7 @@ int main(){
         if (buffer){
             std::string str = buffer;
             parse_input(str,&proj_list);
-            add_history(buffer);
+            if(str.length() > 1) add_history(buffer);
             free(buffer);
         }
     }
