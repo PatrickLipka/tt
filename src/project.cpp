@@ -104,7 +104,7 @@ void ProjectList::save(std::string file_name){
     of.close();
 }
 
-void ProjectList::load(std::string file_name){
+void ProjectList::load(std::string file_name, bool ignore_worktimes){
     std::ifstream inf(file_name, std::ios::binary);
     int active;
     if (!inf){
@@ -142,7 +142,7 @@ void ProjectList::load(std::string file_name){
             Task task(task_name);
             int work_time=0;
             inf.read((char*) &(work_time), sizeof(int));
-            task.add_time(work_time);
+            if(!ignore_worktimes) task.add_time(work_time);
             proj.add_task(task);  
         }
         // needed to get the active_task pointers right _after_ adding tasks to projetcs

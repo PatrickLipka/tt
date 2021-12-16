@@ -27,6 +27,27 @@ std::string get_date(){
     return date_str;
 }
 
+std::string get_last_date(){
+    time_t t = time(NULL);
+    tm *date = localtime(&t);
+    int month = date->tm_mon;
+    int year = date->tm_year+1900;
+
+    if(month == 0){
+        month = 12;
+        year--;
+    }
+    
+    std::string month_str;
+    if (month < 10){
+        month_str = "0"+std::to_string(month);
+    }else{
+        month_str = std::to_string(month);
+    }
+    std::string date_str = std::to_string(year)+"-"+month_str;
+    return date_str;
+}
+
 void parse_config_file(std::string file_name, std::string *user_name, std::string *tracking_dir){
     std::ifstream f(file_name);
     if (!f){
@@ -62,20 +83,28 @@ int main(){
     config_file = prefix+"/etc/tt.conf";
     parse_config_file(config_file, &user_name, &tracking_dir);    
     
-    // TEST: set up test list
-    ProjectList proj_list("dec");
-    Project proj("Test Project");
-    Task task1("Task 1"),task2("Task 2"),task3("Task 3");
-    proj.add_task(task1);
-    proj.add_task(task2);
-    proj.add_task(task3);
-    proj_list.add_project(proj);
-   // proj_list.load(get_date());
+    ProjectList proj_list(get_date());
+    
+    // if available: load project list for current month, else: start with list from last month
+    std::string proj_file = tracking_dir+"/"+get_date();
+    std::string last_proj_file = tracking_dir+"/"+get_last_date();
+    std::ifstream f(proj_file);
+    std::ifstream lf(last_proj_file);
+    if(f){
+        f.close();
+        lf.close();
+        proj_list.load(proj_file);
+    }else if (lf){
+        f.close();
+        lf.close();
+        // don't load work times from previous month
+        proj_list.load(last_proj_file,true);
+    }
 
     init_autocomplete(&proj_list);
+
     // use GNU readline for auto completion and history when parsing command input
     while(1) {
-
         rl_attempted_completion_function = tt_name_completion;
         char *buffer = readline("tt> ");
         if (buffer){
