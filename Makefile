@@ -4,6 +4,8 @@ OBJFLAGS := $(CXXFLAGS) -c
 LDFLAGS := -lreadline
 
 PREFIX ?= /usr/local
+USER_NAME ?= $(USER)
+TRACKING_DIR ?= /home/$(USER)/track
 
 BIN_PATH := bin
 SRC_PATH := src
@@ -24,8 +26,19 @@ makedir:
 
 all: $(BIN_PATH)/tt
 
+install: all
+	@echo "Installing tt at $(PREFIX) for user $(USER_NAME). Tracking directory will be $(TRACKING_DIR)."
+	@mkdir -p $(PREFIX)/bin
+	@mkdir -p $(PREFIX)/etc
+	@cp bin/tt $(PREFIX)/bin
+	@touch $(PREFIX)/etc/tt.conf;\
+		echo "user_name=$(USER_NAME)" > $(PREFIX)/etc/tt.conf;\
+		echo "tracking_directory=$(TRACKING_DIR)" >> $(PREFIX)/etc/tt.conf
+	@echo "tt successfully installed. User name and tracking directory can be adjusted in $(PREFIX)/etc/tt.conf."
+	
+
 clean:
-	@rm -rf $(SRC_PATH)/*.o
-	@rm -rf $(BIN_PATH)/tt
+	rm -rf $(SRC_PATH)/*.o
+	rm -rf $(BIN_PATH)/tt
 
 .PHONY: makedir clean
