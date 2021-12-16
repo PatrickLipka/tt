@@ -13,6 +13,7 @@
 #include "track.h"
 #include "string_utils.h"
 #include "tt.h"
+#include "util.h"
 
 // Uses GNU readline library for autocompletion and command history
 
