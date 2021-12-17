@@ -67,6 +67,12 @@ Time Tracker Development
 ~~~
 
 #### `np <Project Name>`
+Creates a new empty project with the given name and sets it active. The name must not be different from the existing projects.\
+Example:
+~~~
+tt> np Test Project
+Switched to project Test Project
+~~~
 
 #### `nt [<Project Name>/]<Task Name>`
 
