@@ -1,6 +1,6 @@
 # tt
-Simple command line time tracker for POSIX systems.
-Written by Patrick Lipka (patrick.lipka@emea.nec.com)
+Simple command line time tracker for POSIX systems. \
+Written by Patrick Lipka (patrick.lipka@emea.nec.com) \
 This software is licensed under the BSD-2-clause license. Please see LICENSE for details.
 
 ## Dependencies
