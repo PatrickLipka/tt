@@ -41,7 +41,8 @@ The file `$PREFIX/etc/tt.conf` has the format `key=value` and contains the follo
 * `tracking_directory` - directory where tracking files are saved and loaded from
 
 ## Usage
-The program `tt` does not take any command line arguments. Once launched, it provides a command prompt which supports TAB completion and a command history using the arrow keys. It can be exited by pressing CTRL-C (catches SIGINT).
+The program `tt` does not take any command line arguments. Once launched, it provides a command prompt which supports TAB completion and a command history using the arrow keys. Note that white spaces are displayed as underscores in completion suggestions.\
+The program can be exited by pressing CTRL-C (catches SIGINT).
 
 At startup, the config file `$PREFIX/etc/tt.conf` is beeing read and tracking data is loaded from `tracking_directory` if available. In case there is no tracking data available for the current month, the project structures are loaded from the previous month's file. In case there is no data available, an empty project list is beeing set up.
 
@@ -92,7 +93,7 @@ Switched to task HPCE/test
 #### `rm [<Project Name>/]<Task Name> | <Project Name>`
 Deletes all data of a project or task.\ 
 If only a project name is provided, the project with all tasks is beeing deleted. The previous project in the project list is set active\
-If only a task name is provided, this task is beeing deleted rom the active project if present. The previous task in the task list is set active.\
+If only a task name is provided, this task is beeing deleted from the active project if present. The previous task in the task list is set active.\
 If `<Project Name>/<Task Name>` is provided, the task with name `<Task Name>` is deleted from project `<Project Name>` if both are present.\
 Examples:
 ~~~
@@ -119,7 +120,27 @@ Switched to project HPCE
 Tracking data saved to file /home/patrick/track/2021-12
 ~~~
 
-#### `re [<Project Name>/]<Task Name>`
+#### `re [<Project Name>/]<Task Name> <New Task Name> | <Project Name> <New Project Name>`
+Renames tasks or projects to the new name.\
+If only a project name is provided, the project is beeing renamed. \
+If only a task name is provided, this task inside the active project is renamed. \
+If `<Project Name>/<Task Name>` is provided, the task with name `<Task Name>` in Project `<Project Name>` is renamed.\
+Examples:
+~~~
+tt> re Tets Test
+Renamed task Test Project/Tets to Test Project/Test
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
+~~~
+tt> re Test_Project/Test_Task Another Task
+Renamed task Test Project/Test Task to Test Project/Another Task
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
+~~~
+tt> re Tets_Projekt Test Project
+Renamed  project Tets Projekt to Test Project
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
 
 #### `sp <Project Name>`
 
