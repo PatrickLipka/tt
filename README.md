@@ -67,7 +67,7 @@ Time Tracker Development
 ~~~
 
 #### `np <Project Name>`
-Creates a new empty project with the given name and sets it active. The name must not be different from the existing projects.\
+Creates a new empty project with the given name and sets it active. The name must be different from the existing projects.\
 Example:
 ~~~
 tt> np Test Project
@@ -75,8 +75,21 @@ Switched to project Test Project
 ~~~
 
 #### `nt [<Project Name>/]<Task Name>`
+Creates a new task with the given name inside the currently active project and sets it active.\
+If the optional parameter `[<Project Name>]` is present, the task si beeing created in the specified Project instead. This also changes the active project\
+The task name must be different from existing tasks.\
+Example:
+~~~
+tt> nt Test Task
+Switched to task Test Project/Test Task
+~~~
+~~~
+tt> nt HPCE/test
+Switched to task HPCE/test
+~~~
 
 #### `rm [<Project Name>/]<Task Name>`
+
 
 #### `re [<Project Name>/]<Task Name>`
 
