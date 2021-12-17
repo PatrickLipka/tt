@@ -437,6 +437,7 @@ void command_re(std::string input, std::string new_name, ProjectList *proj_list)
         std::string old_name = proj_list->projects[id].name;
         proj->name = underscore_to_space(new_name);
         std::cout << "Renamed  project " << old_name << " to " << proj->name << std::endl;
+        command_save(proj_list);
     }else{
         int task_id = proj_list->active_project->find_task_id_by_name(trim(underscore_to_space(task_name)));
         if (task_id >=0){
@@ -450,6 +451,7 @@ void command_re(std::string input, std::string new_name, ProjectList *proj_list)
                 autocomplete_names.push_back(space_to_underscore(proj->name)+"/"+space_to_underscore(new_name));
             }
             std::cout << "Renamed task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << " to " << underscore_to_space(proj->name) << "/" << underscore_to_space(new_name) << std::endl;
+            command_save(proj_list);
         }else{
             std::cout << "Task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << " does not exist." << std::endl;
         }
