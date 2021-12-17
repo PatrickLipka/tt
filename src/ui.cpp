@@ -520,6 +520,7 @@ void command_rt(std::string input, int wtime, ProjectList *proj_list){
             }
             proj_list->active_project->active_task->add_time(-wtime);
             std::cout << wtime << "s removed from task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name  << std::endl;
+            command_save(proj_list);
             return;
         }else{
             int id=proj_list->active_project->find_task_id_by_name(trim(underscore_to_space(proj_name)));
