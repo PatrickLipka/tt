@@ -80,7 +80,7 @@ Switched to project Test Project
 
 #### `nt [<Project Name>/]<Task Name>`
 Creates a new task with the given name inside the currently active project and sets it active.\
-If the optional parameter `<Project Name>` is present, the task si beeing created in the specified Project instead. This also changes the active project\
+If the optional parameter `<Project Name>` is present, the task is beeing created in the specified Project instead. This also changes the active project to `<Project Name>`\
 The task name must be different from existing tasks.
 
 Examples:
@@ -94,7 +94,7 @@ Switched to task HPCE/test
 ~~~
 
 #### `rm [<Project Name>/]<Task Name> | <Project Name>`
-Deletes all data of a project or task.\ 
+Deletes all data of a project or task. \ 
 If only a project name is provided, the project with all tasks is beeing deleted. The previous project in the project list is set active\
 If only a task name is provided, this task is beeing deleted from the active project if present. The previous task in the task list is set active.\
 If `<Project Name>/<Task Name>` is provided, the task with name `<Task Name>` is deleted from project `<Project Name>` if both are present.
@@ -217,8 +217,7 @@ tt> at 120 Project_2/Task_1
 Tracking data saved to file /home/patrick/track/2021-12
 ~~~
 #### `rt [<Project Name>/]<Task Name>`
-Remove time from task.\ 
-Usage identical to `at`.
+Remove time from task. Usage identical to `at`.
 
 #### `report [<yyyy-mm>]`
 Generate report for current month. This does only list tasks with working time of more than 0.01h in current month. \
