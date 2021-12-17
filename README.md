@@ -23,6 +23,7 @@ The following variables can be used to configure the build:
 * `PREFIX` - install prefix, defaults to `/usr/local`
 * `USER_NAME` - user name to be mentioned in monthly reports, defaults to `$USER`
 * `TRACKING_DIR` - directory where tracking files are saved, defaults to `/home/$USER/track`
+
 The user name and tracking directory can also be set after installation by modifying `$PREFIX/etc/tt.conf`
 
 ### Build command
