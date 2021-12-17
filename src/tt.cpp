@@ -13,16 +13,20 @@
 #include "tt.h"
 #include "util.h"
 
+// glovbal variables:
 std::string user_name, tracking_dir, config_file;
 
 int main(){ 
     // connect SIGINT signal (CTRL-C) to signal handler from track.h to use it to stop tracking of projects
     signal(SIGINT, handler);
     tracking = 0;
+
+    // PREFIX set by preprocessor, see Makefile
     std::string prefix=STRING(PREFIX);
     config_file = prefix+"/etc/tt.conf";
     parse_config_file(config_file, &user_name, &tracking_dir);    
     
+    // initialize project list for current month
     ProjectList proj_list(get_date());
     
     // if available: load project list for current month, else: start with list from last month
@@ -41,6 +45,7 @@ int main(){
         proj_list.load(last_proj_file,true);
     }
 
+    // add command names and names of project list to the autocomplete names
     init_autocomplete(&proj_list);
 
     // use GNU readline for auto completion and history when parsing command input

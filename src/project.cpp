@@ -11,23 +11,27 @@ Project::Project(std::string name){
     Project::active_task = NULL;
 }
 
+// adds task to project
 void Project::add_task(Task task){
     tasks.push_back(task);
     set_active_task(num_tasks);
     num_tasks++;
 }
 
+// removes task from project by task id (position in tasks vector)
 void Project::remove_task(int id){
     tasks.erase(tasks.begin()+id);
     set_active_task(std::max(id-1,0));
     num_tasks--;
 }
 
+// sets active task pointer and id by task id (position in tasks vector)
 void Project::set_active_task(int id){
     active_task_id = id;
     active_task = &tasks[id];
 }
 
+// returns pointer to task with name task_name if present in tasks vector
 Task* Project::find_task_by_name(std::string task_name){
     for (int i=0; i<num_tasks; i++){
         if(tasks[i].name == task_name){
@@ -37,6 +41,7 @@ Task* Project::find_task_by_name(std::string task_name){
     return NULL;
 }
 
+// returns id of task with name task_name if present in tasks vector
 int Project::find_task_id_by_name(std::string task_name){
     for (int i=0; i<num_tasks; i++){
         if(tasks[i].name == task_name){
@@ -46,6 +51,7 @@ int Project::find_task_id_by_name(std::string task_name){
     return -1;
 }
 
+// returns sum of task work times in project
 int Project::get_total_work_time(){
    int wtime_proj = 0;
    for (int i=0; i<num_tasks; i++){
@@ -62,29 +68,31 @@ ProjectList::ProjectList(std::string month){
     ProjectList::num_projects = 0;
 }
 
+// adds project to project list
 void ProjectList::add_project(Project proj){
     projects.push_back(proj);
     set_active_project(num_projects);
     num_projects++;
 }
 
+// removes project from proects list by id (position in projects vector)
 void ProjectList::remove_project(int id){
     projects.erase(projects.begin()+id);
     set_active_project(std::max(id-1,0));
     num_projects--;
 }
 
+// sets active project pointer and id by id (position in projects vector)
 void ProjectList::set_active_project(int id){
     active_project_id = id;
     active_project = &projects[id];
 }
 
-
+// serializes project list and writes it to binary file
 void ProjectList::save(std::string file_name){
     std::ofstream of(file_name, std::ios::binary);
     if (!of){
         std::cout << "Could not open file " << file_name << " for writing!" << std::endl;
-       // exit(1);
     }
     of.write((char*) &num_projects, sizeof(int));
     of.write((char*) &active_project_id, sizeof(int));
@@ -104,6 +112,7 @@ void ProjectList::save(std::string file_name){
     of.close();
 }
 
+// reads project list from binary file
 void ProjectList::load(std::string file_name, bool ignore_worktimes){
     std::ifstream inf(file_name, std::ios::binary);
     int active;
@@ -111,11 +120,16 @@ void ProjectList::load(std::string file_name, bool ignore_worktimes){
         std::cout << "Could not open file " << file_name << " for reading!" << std::endl;
     }
     inf.read((char*) &num_projects,sizeof(int));
+    // save copy of num_projects to control loop and apply later as
+    // num_projects will get bigger when adding projects to the project list
     int number_of_projects = num_projects;
     inf.read((char*) &active, sizeof(int));
-    int np = num_projects;
-    int *active_task_arr = new int[np];
-    for (int i=0; i<np;i++){
+    // build active task array to set active tasks once 
+    // project list is set up to get the poiters right
+    int *active_task_arr = new int[number_of_projects];
+    
+    // read project properties
+    for (int i=0; i<number_of_projects; i++){
         size_t len;
         std::string proj_name;
         int active_t;
@@ -130,6 +144,7 @@ void ProjectList::load(std::string file_name, bool ignore_worktimes){
         int number_of_tasks = proj.num_tasks;
         inf.read((char*) &active_t, sizeof(int));
         int nt = proj.num_tasks;
+        // read task properties
         for (int j=0; j<nt; j++){
             std::string task_name;
             size_t task_name_len;
@@ -151,7 +166,7 @@ void ProjectList::load(std::string file_name, bool ignore_worktimes){
         add_project(proj);
     }
     set_active_project(active);
-    for (int i=0; i<np ; i++){
+    for (int i=0; i<number_of_projects ; i++){
         projects[i].set_active_task(active_task_arr[i]);
     }
     delete [] active_task_arr;
@@ -159,6 +174,7 @@ void ProjectList::load(std::string file_name, bool ignore_worktimes){
     num_projects = number_of_projects;
 }
 
+// returns pointer to project with name proj_name if present in projects vector
 Project* ProjectList::find_project_by_name(std::string proj_name){
     for (int i=0; i<num_projects; i++){
         if(projects[i].name == proj_name){
@@ -168,6 +184,7 @@ Project* ProjectList::find_project_by_name(std::string proj_name){
     return NULL;
 }
 
+// returns id of project with name proj_name is present in projects vector
 int ProjectList::find_project_id_by_name(std::string proj_name){
     for (int i=0; i<num_projects; i++){
         if(projects[i].name == proj_name){

@@ -15,8 +15,7 @@
 #include "tt.h"
 #include "util.h"
 
-// Uses GNU readline library for autocompletion and command history
-
+// names of available commands
 std::string command_names[num_commands]={
     "np",
     "nt",
@@ -32,12 +31,15 @@ std::string command_names[num_commands]={
     "save"
 };
 
-std::vector<std::string> autocomplete_names;
+std::vector<std::string> autocomplete_names; // global variable
+
+// completion function for readline
 char **tt_name_completion(const char* text, int start, int end){
     rl_attempted_completion_over = 1;
     return rl_completion_matches(text, tt_name_generator);
 }
 
+// search for input in auto complete names to attempt completion and give options
 char *tt_name_generator(const char *text, int state){
      static std::vector<std::string>::const_iterator it;
      if (state == 0) it=begin(autocomplete_names);
@@ -51,6 +53,7 @@ char *tt_name_generator(const char *text, int state){
      return NULL;
 }
 
+// add command and project/task names to auto complete list
 void init_autocomplete(ProjectList *proj_list){
     // add command names to auto complete list
     for (int i=0; i<num_commands; i++){
@@ -68,6 +71,7 @@ void init_autocomplete(ProjectList *proj_list){
     }
 }
 
+// parse user input and call appropriate commad_* functions 
 void parse_input(std::string input, ProjectList *proj_list){
     input = trim(input);
     size_t command_end = input.find(" ");
@@ -158,8 +162,7 @@ void parse_input(std::string input, ProjectList *proj_list){
                     command_rt(task_name,stoi(wtime_str),proj_list);
                 }else{
                     std::cout << "remove time: please specify time to remove and task name [optional]." << std::endl;
-                }
-                                                                                                                
+                }                                                                                       
             }
         }
     }else if (command == "report"){
@@ -262,6 +265,7 @@ void command_rm(std::string input, ProjectList *proj_list){
     }
     bool del = false;
     if (place_of_slash == std::string::npos && id >= 0){
+        // do not let the user remove projects by accident
         std::cout << "Do you really want to remove project " << underscore_to_space(proj_name) << "? [y|n]" << std::endl;
         std::string input;
         while(1){
@@ -302,6 +306,7 @@ void command_rm(std::string input, ProjectList *proj_list){
         int task_id = proj_list->active_project->find_task_id_by_name(trim(underscore_to_space(task_name)));
         if (task_id >=0){
             del = false;
+            // do not let the user remove tasks by accident
             std::cout << "Do you really want to remove task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << "? [y|n]" << std::endl;
             std::string input;
             while(1){
@@ -383,6 +388,7 @@ void command_st(std::string input, ProjectList *proj_list){
    int proj_id = proj_list->find_project_id_by_name(trim(underscore_to_space(proj_name)));
    Project *proj = proj_list->find_project_by_name(trim(underscore_to_space(proj_name)));
    if (place_of_slash == std::string::npos){
+        // task in same project
         proj = proj_list->active_project;
         proj_id = proj_list->find_project_id_by_name(trim(underscore_to_space(proj_list->active_project->name)));
    }
@@ -540,6 +546,7 @@ void command_rt(std::string input, int wtime, ProjectList *proj_list){
     }
 }
 
+// print monthly report 
 void command_report(std::string date_str, ProjectList* proj_list){
     date_str = trim(date_str);
     size_t place_of_minus = date_str.find("-");
@@ -561,6 +568,7 @@ void command_report(std::string date_str, ProjectList* proj_list){
                     float wtime_task = proj->tasks[j].work_time / 3600.0;
                     if(wtime_task >= 0.01) std::cout << "--- " << proj->tasks[j].name << ": " << std::fixed << std::setprecision(2) << wtime_task << std::endl;
                 }
+                // format: *.xx hours
                 std::cout << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << std::endl << std::endl;
             }
         }
@@ -580,6 +588,7 @@ void command_report(std::string date_str, ProjectList* proj_list){
                         float wtime_task = proj->tasks[j].work_time / 3600.0;
                         if(wtime_task >= 0.01) std::cout << "--- " << proj->tasks[j].name << ": " << std::fixed << std::setprecision(2) << wtime_task << std::endl;
                     }
+                    // format: *.xx hours
                     std::cout << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << std::endl << std::endl;
                 }
             }
@@ -589,7 +598,8 @@ void command_report(std::string date_str, ProjectList* proj_list){
     }
 }
 
-// save project list to file - POSIX only
+// save project list to file, uses system("mkdir") to create diretory
+// might be replaced by C++ filesystem API int the future
 void command_save(ProjectList *proj_list){
     std::string date_str = get_date();
     std::string file_name = tracking_dir+"/"+date_str;

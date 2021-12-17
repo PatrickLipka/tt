@@ -2,6 +2,7 @@
 #include <iostream>
 #include "util.h"
 
+// returns string in format "yyyy-mm"
 std::string get_date(){
     time_t t = time(NULL);
     tm *date = localtime(&t);
@@ -17,12 +18,14 @@ std::string get_date(){
     return date_str;
 }
 
+// returns date string for previous month
 std::string get_last_date(){
     time_t t = time(NULL);
     tm *date = localtime(&t);
     int month = date->tm_mon;
     int year = date->tm_year+1900;
-
+    
+    // in case of January:
     if(month == 0){
         month = 12;
         year--;
@@ -38,6 +41,7 @@ std::string get_last_date(){
     return date_str;
 }
 
+// basic parsing of configureation file to get user name and tracking directory
 void parse_config_file(std::string file_name, std::string *user_name, std::string *tracking_dir){
     std::ifstream f(file_name);
     if (!f){

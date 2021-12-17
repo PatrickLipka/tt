@@ -6,7 +6,10 @@
 int sigint;
 int tracking;
 
+// signal handler to execute when receiving SIGINT (CTRL-C)
 void handler(int signum){
+    // while tracking: end tracking and continue execution
+    // else: exit program
     if (tracking){
         sigint = 1;
         std::cout << std::endl;
@@ -15,10 +18,12 @@ void handler(int signum){
     }
 }
 
+// track time for active task in project
 void track(Project *proj){
     int worktime = 0;
     int work_h, work_m, work_s;
     time_t start;
+    // clear terminal
     system("clear");
     time(&start);
     tracking = 1;
