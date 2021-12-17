@@ -27,8 +27,10 @@ The user name and tracking directory can also be set after installation by modif
 
 ### Build command
 The default install process is:
-`USER_NAME="<Your full name>" make`
-`sudo make install`
+~~~~
+USER_NAME="<Your full name>" make
+sudo make install
+~~~~
 
 Note that there is not `/home` directory on macOS. You may want to set `TRACKING_DIR=/Users/$USER/track`.
 
