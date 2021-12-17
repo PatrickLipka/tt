@@ -28,7 +28,8 @@ std::string command_names[num_commands]={
     "report",
     "ls",
     "start",
-    "save"
+    "save",
+    "version"
 };
 
 std::vector<std::string> autocomplete_names; // global variable
@@ -173,6 +174,8 @@ void parse_input(std::string input, ProjectList *proj_list){
         }
     }else if (command == "save"){
         command_save(proj_list);
+    }else if (command == "version"){
+        command_version();
     }
 }
 
@@ -611,4 +614,11 @@ void command_save(ProjectList *proj_list){
     system (command.c_str());
     proj_list->save(file_name);
     std::cout << "Tracking data saved to file " << file_name << std::endl;
+}
+
+// print version number
+void command_version(){
+    std::cout << "tt v." << STRING(TT_VERSION) << std::endl;
+    std::cout << "Author: Patrick Lipka (patrick.lipka@emea.nec.com)" << std::endl;
+    std::cout << "tt is free software published under the BSD-2-Clause licence (see. https://opensource.org/licenses/BSD-2-Clause)" << std::endl;
 }

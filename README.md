@@ -94,7 +94,7 @@ Switched to task HPCE/test
 ~~~
 
 #### `rm [<Project Name>/]<Task Name> | <Project Name>`
-Deletes all data of a project or task. \ 
+Deletes all data of a project or task.\ 
 If only a project name is provided, the project with all tasks is beeing deleted. The previous project in the project list is set active\
 If only a task name is provided, this task is beeing deleted from the active project if present. The previous task in the task list is set active.\
 If `<Project Name>/<Task Name>` is provided, the task with name `<Task Name>` is deleted from project `<Project Name>` if both are present.
@@ -250,3 +250,6 @@ Project: Code Project
 --- Debugging: 9.26
 Total: 24.35
 ~~~
+
+### `version`
+Prints the version number of `tt`
