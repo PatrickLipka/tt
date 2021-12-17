@@ -52,7 +52,8 @@ One task cannot be part of multiple projects. Tasks are not further divided into
 The following commands are available:
 #### `ls [<Project Name>]`
 Prints active project, active task (if present) and the names of all projects.\
-If the optional parameter `<Project Name>` is present, a list of Tasks for this project is printed.\
+If the optional parameter `<Project Name>` is present, a list of Tasks for this project is printed.
+
 Example:
 ~~~
 tt> ls
@@ -69,7 +70,8 @@ Time Tracker Development
 ~~~
 
 #### `np <Project Name>`
-Creates a new empty project with the given name and sets it active. The name must be different from the existing projects.\
+Creates a new empty project with the given name and sets it active. The name must be different from the existing projects.
+
 Example:
 ~~~
 tt> np Test Project
@@ -79,7 +81,8 @@ Switched to project Test Project
 #### `nt [<Project Name>/]<Task Name>`
 Creates a new task with the given name inside the currently active project and sets it active.\
 If the optional parameter `<Project Name>` is present, the task si beeing created in the specified Project instead. This also changes the active project\
-The task name must be different from existing tasks.\
+The task name must be different from existing tasks.
+
 Examples:
 ~~~
 tt> nt Test Task
@@ -94,7 +97,8 @@ Switched to task HPCE/test
 Deletes all data of a project or task.\ 
 If only a project name is provided, the project with all tasks is beeing deleted. The previous project in the project list is set active\
 If only a task name is provided, this task is beeing deleted from the active project if present. The previous task in the task list is set active.\
-If `<Project Name>/<Task Name>` is provided, the task with name `<Task Name>` is deleted from project `<Project Name>` if both are present.\
+If `<Project Name>/<Task Name>` is provided, the task with name `<Task Name>` is deleted from project `<Project Name>` if both are present.
+
 Examples:
 ~~~
 tt> rm test
@@ -120,11 +124,12 @@ Switched to project HPCE
 Tracking data saved to file /home/patrick/track/2021-12
 ~~~
 
-#### `re [<Project Name>/]<Task Name> <New Task Name> | <Project Name> <New Project Name>`
+#### `re [<Project Name>/]<Task Name> <New Task Name> |<Project Name> <New Project Name>`
 Renames tasks or projects to the new name.\
 If only a project name is provided, the project is beeing renamed. \
 If only a task name is provided, this task inside the active project is renamed. \
-If `<Project Name>/<Task Name>` is provided, the task with name `<Task Name>` in Project `<Project Name>` is renamed.\
+If `<Project Name>/<Task Name>` is provided, the task with name `<Task Name>` in Project `<Project Name>` is renamed.
+
 Examples:
 ~~~
 tt> re Tets Test
@@ -143,6 +148,13 @@ Tracking data saved to file /home/patrick/track/2021-12
 ~~~
 
 #### `sp <Project Name>`
+Switches to another project, thus setting Project with name `<Project Name>` active.
+
+Example:
+~~~
+tt> sp Project 2
+Switched to project Project 2
+~~~
 
 #### `st [<Project Name>/]<Task Name>`
 
