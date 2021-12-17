@@ -16,12 +16,23 @@ The program has been tested on the following systems:
 * macOS 11.5.2, Apple clang 12.0.5
 
 ## Installation
+
+### Makefile variables
 The following variables can be used to configure the build:
 * `CXX` - C++ compiler, defaults to `g++`
 * `PREFIX` - install prefix, defaults to `/usr/local`
 * `USER_NAME` - user name to be mentioned in monthly reports, defaults to `$USER`
 * `TRACKING_DIR` - directory where tracking files are saved, defaults to `/home/$USER/track`
+The user name and tracking directory can also be set after installation by modifying `$PREFIX/etc/tt.conf`
+
+### Build command
+The default install process is:
+`USER_NAME="<Your full name>" make`
+`sudo make install`
+
+Note that there is not `/home` directory on macOS. You may want to set `TRACKING_DIR=/Users/$USER/track`.
 
 ## Settings
+
 
 ## Usage
