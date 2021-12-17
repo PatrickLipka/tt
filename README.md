@@ -217,5 +217,37 @@ tt> at 120 Project_2/Task_1
 Tracking data saved to file /home/patrick/track/2021-12
 ~~~
 #### `rt [<Project Name>/]<Task Name>`
+Remove time from task.\ 
+Usage identical to `at`.
 
 #### `report [<yyyy-mm>]`
+Generate report for current month. This does only list tasks with working time of more than 0.01h in current month. \
+If the optional argument `<yyyy-mm>` is present, a report for month `mm` of year `yyyy` is beeing generated from file `<tracking_directory>/yyyy-mm`.
+
+Examples:
+~~~
+tt>report
+Report for Patrick Lipka, month: 2021-12
+
+Project: Test Project
+--- Task 2: 0.04
+Total: 0.05
+
+Project: Project 2
+--- Task 1: 0.03
+--- Task 2: 16.61
+Total: 16.65
+~~~
+~~~
+tt> report 2019-05
+Report for Patrick Lipka, month: 2019-05
+
+Project: Client 1
+--- Support: 1.67
+Total: 1.67
+
+Project: Code Project
+--- Implementation: 15.09
+--- Debugging: 9.26
+Total: 24.35
+~~~
