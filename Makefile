@@ -1,7 +1,7 @@
 -include config.out
 
 CXX ?= g++
-CXXFLAGS := -g -Wall -pedantic
+CXXFLAGS := -std=c++11 -g -Wall -pedantic
 OBJFLAGS := $(CXXFLAGS) -c
 LDFLAGS := -lreadline
 
