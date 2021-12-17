@@ -499,6 +499,7 @@ void command_at(std::string input, int wtime, ProjectList *proj_list){
     if(id >= 0){
         proj->tasks[id].add_time(wtime);
         std::cout << wtime << "s added to task " << proj->name << "/" << proj->tasks[id].name << std::endl;
+        command_save(proj_list);
     }else{
         std::cout << "Task " << underscore_to_space(input) << " does not exist." << std::endl;
     }
