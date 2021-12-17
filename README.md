@@ -45,24 +45,24 @@ The program `tt` does not take any command line arguments. Once launched, it pro
 At startup, the config file `$PREFIX/etc/tt.conf` is beeing read and tracking data is loaded from `tracking_directory` if available. In case there is no tracking data available for the current month, the project structures are loaded from the previous month's file. In case there is no data available, an empty project list is beeing set up.
 
 The following commands are available:
-### 'ls [<Project Name>]'
+#### `ls [<Project Name>]`
 
-### `np <Project Name>`
+#### `np <Project Name>`
 
-### `nt [<Project Name>/]<Task Name>`
+#### `nt [<Project Name>/]<Task Name>`
 
-### `rm [<Project Name>/]<Task Name>`
+#### `rm [<Project Name>/]<Task Name>`
 
-### `re [<Project Name>/]<Task Name>`
+#### `re [<Project Name>/]<Task Name>`
 
-### `sp <Project Name>`
+#### `sp <Project Name>`
 
-### `st [<Project Name>/]<Task Name>`
+#### `st [<Project Name>/]<Task Name>`
 
-### `start <Project Name>/]<Task Name>`
+#### `start <Project Name>/]<Task Name>`
 
-### `at [<Project Name>/]<Task Name>`
+#### `at [<Project Name>/]<Task Name>`
 
-### `rt [<Project Name>/]<Task Name>`
+#### `rt [<Project Name>/]<Task Name>`
 
-### `report [<yyyy-mm>]`
+#### `report [<yyyy-mm>]`
