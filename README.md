@@ -40,3 +40,29 @@ The file `$PREFIX/etc/tt.conf` has the format `key=value` and contains the follo
 * `tracking_directory` - directory where tracking files are saved and loaded from
 
 ## Usage
+The program `tt` does not take any command line arguments. Once launched, it provides a command prompt which supports TAB completion and a command history using the arrow keys. It can be exited by pressing CTRL-C (catches SIGINT).
+
+At startup, the config file `$PREFIX/etc/tt.conf` is beeing read and tracking data is loaded from `tracking_directory` if available. In case there is no tracking data available for the current month, the project structures are loaded from the previous month's file. In case there is no data available, an empty project list is beeing set up.
+
+The following commands are available:
+### 'ls [<Project Name>]'
+
+### `np <Project Name>`
+
+### `nt [<Project Name>/]<Task Name>`
+
+### `rm [<Project Name>/]<Task Name>`
+
+### `re [<Project Name>/]<Task Name>`
+
+### `sp <Project Name>`
+
+### `st [<Project Name>/]<Task Name>`
+
+### `start <Project Name>/]<Task Name>`
+
+### `at [<Project Name>/]<Task Name>`
+
+### `rt [<Project Name>/]<Task Name>`
+
+### `report [<yyyy-mm>]`
