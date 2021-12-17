@@ -296,11 +296,11 @@ void command_rm(std::string input, ProjectList *proj_list){
             }
             proj_list->remove_project(id);
             std::cout << "Removed project " << underscore_to_space(proj_name) << "." << std::endl;
-            command_save(proj_list);
 
             if (proj_list->num_projects > 0) {
                 std::cout << "Switched to project " << proj_list->active_project->name << std::endl;
              }
+            command_save(proj_list);
         }        
     }else{
         int task_id = proj_list->active_project->find_task_id_by_name(trim(underscore_to_space(task_name)));
@@ -332,10 +332,10 @@ void command_rm(std::string input, ProjectList *proj_list){
                 }
 
                 std::cout << "Removed  task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << std::endl;
-                command_save(proj_list);
                 if (proj->num_tasks > 0) {
                     std::cout << "Switched to task " << underscore_to_space(proj->name) << "/" << underscore_to_space(proj->active_task->name) << std::endl;
                  }
+                command_save(proj_list);
             }        
         }else{
             std::cout << "Task " << underscore_to_space(proj->name) << "/" << underscore_to_space(task_name) << " does not exist." << std::endl;
