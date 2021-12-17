@@ -170,7 +170,30 @@ tt> st Test_Project/Debugging
 Switched to task Test Project/Debugging
 ~~~
 
-#### `start <Project Name>/]<Task Name>`
+#### `start <Project Name>/][<Task Name>]`
+Starts tracking for the currently active task.\
+If the optional parameter `<Project Name>` is present, the task with name `<Task Name>` of project `<Project Name>` is set active and tracking starts. This also causes the active project to change to `<Project Name>`.\
+Tracking can be stopped by pressing `CTRL-C`.
+
+Examples:
+~~~
+tt> start
+Started tracking of task Test Project/Debugging at Fri Dec 17 16:07:43 2021
+
+Press CTRL-C to stop tracking
+^C
+Time worked on project: 00:00:02
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
+~~~
+start Project_2/Task_1
+Started tracking of task Project 2/Task 1 at Fri Dec 17 16:10:07 2021
+
+Press CTRL-C to stop tracking
+^C
+Time worked on project: 00:00:06
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
 
 #### `at [<Project Name>/]<Task Name>`
 
