@@ -44,8 +44,27 @@ The program `tt` does not take any command line arguments. Once launched, it pro
 
 At startup, the config file `$PREFIX/etc/tt.conf` is beeing read and tracking data is loaded from `tracking_directory` if available. In case there is no tracking data available for the current month, the project structures are loaded from the previous month's file. In case there is no data available, an empty project list is beeing set up.
 
+The general concept is to have a list of projects with unique names. Each project has its own list of tasks which can be set active and for which time can be tracked.\
+One task cannot be part of multiple projects. Tasks are not further divided into subtasks.
+
 The following commands are available:
 #### `ls [<Project Name>]`
+Prints active project, active task (if present) and the names of all projects.\
+If the optional parameter `<Project Name>` is present, a list of Tasks for this project is printed.\
+Example:
+~~~
+tt> ls
+Active Project/Task: HPCE/Aurora Compiler Testsuite
+
+List of Projects:
+HPCE
+~~~
+~~~
+tt> ls HPCE
+List of Tasks for Project HPCE:
+Various
+Time Tracker Development
+~~~
 
 #### `np <Project Name>`
 
