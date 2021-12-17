@@ -210,8 +210,12 @@ void command_start(std::string input, ProjectList *proj_list){
 
     if (str.length() == 0){
         // start tracking for active task
-        track(proj_list->active_project);
-        command_save(proj_list);
+        if (proj_list->active_project == NULL || proj_list->active_project->active_task == NULL){
+            std::cout << "Project list or current project is empty. Please add projects/tasks first." << std::endl;
+        }else{
+            track(proj_list->active_project);
+            command_save(proj_list);
+        }       
     }else{
         // change active task and start tracking
         int place_of_slash = str.find("/");
