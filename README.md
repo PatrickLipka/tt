@@ -77,9 +77,9 @@ Switched to project Test Project
 
 #### `nt [<Project Name>/]<Task Name>`
 Creates a new task with the given name inside the currently active project and sets it active.\
-If the optional parameter `[<Project Name>]` is present, the task si beeing created in the specified Project instead. This also changes the active project\
+If the optional parameter `<Project Name>` is present, the task si beeing created in the specified Project instead. This also changes the active project\
 The task name must be different from existing tasks.\
-Example:
+Examples:
 ~~~
 tt> nt Test Task
 Switched to task Test Project/Test Task
@@ -89,8 +89,35 @@ tt> nt HPCE/test
 Switched to task HPCE/test
 ~~~
 
-#### `rm [<Project Name>/]<Task Name>`
-
+#### `rm [<Project Name>/]<Task Name> | <Project Name>`
+Deletes all data of a project or task.\ 
+If only a project name is provided, the project with all tasks is beeing deleted. The previous project in the project list is set active\
+If only a task name is provided, this task is beeing deleted rom the active project if present. The previous task in the task list is set active.\
+If `<Project Name>/<Task Name>` is provided, the task with name `<Task Name>` is deleted from project `<Project Name>` if both are present.\
+Examples:
+~~~
+tt> rm test
+Do you really want to remove task HPCE/test? [y|n]
+y
+Removed  task HPCE/test
+Switched to task HPCE/Time Tracker Development
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
+~~~
+tt> rm Test_Project/Test_Task 
+Do you really want to remove task Test Project/Test Task? [y|n]
+y
+Removed  task Test Project/Test Task
+Tracking data saved to file /home/patrick/track/2021-1
+~~~
+~~~
+tt> rm Test_Project 
+Do you really want to remove project Test Project? [y|n]
+y
+Removed project Test Project.
+Switched to project HPCE
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
 
 #### `re [<Project Name>/]<Task Name>`
 
