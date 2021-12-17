@@ -32,9 +32,11 @@ USER_NAME="<Your full name>" make
 sudo make install
 ~~~~
 
-Note that there is not `/home` directory on macOS. You may want to set `TRACKING_DIR=/Users/$USER/track`.
+Note that there is no `/home` directory on macOS. You may want to set `TRACKING_DIR=/Users/$USER/track`.
 
 ## Settings
-
+The file `$PREFIX/etc/tt.conf` has the format `key=value` and contains the following settings:
+* `user_name` - user name to be mentioned in monthly reports
+* `tracking_directory` - directory where tracking files are saved and loaded from
 
 ## Usage
