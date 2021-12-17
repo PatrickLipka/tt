@@ -157,6 +157,18 @@ Switched to project Project 2
 ~~~
 
 #### `st [<Project Name>/]<Task Name>`
+Switches to another task of the same project.\
+If the optional parameter `<Project Name>` is present, the task with name `<Task Name>` of project `<Project Name>` is set active. This also causes the active project to change to `<Project Name>`.
+
+Examples:
+~~~
+tt> st Task 2
+Switched to task Project 2/Task 2
+~~~
+~~~
+tt> st Test_Project/Debugging 
+Switched to task Test Project/Debugging
+~~~
 
 #### `start <Project Name>/]<Task Name>`
 
