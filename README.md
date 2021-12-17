@@ -12,8 +12,8 @@ The program assumes POSIX functionalities as provided by unistd.h. The best way 
 To compile the program you need a C++ compiler which supports the C++11 standard.
 
 The program has ben tested on the following systems:
-    - Debian Linux 5.10.70-1, GCC 10.2.1 20210110
-    - macOS 11.5.2, Apple clang 12.0.5
+* Debian Linux 5.10.70-1, GCC 10.2.1 20210110
+* macOS 11.5.2, Apple clang 12.0.5
 
 ## Installation
 
