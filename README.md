@@ -195,8 +195,27 @@ Time worked on project: 00:00:06
 Tracking data saved to file /home/patrick/track/2021-12
 ~~~
 
-#### `at [<Project Name>/]<Task Name>`
+#### `at <seconds> [<Project Name>/][<Task Name>]`
+Manually adds `<seconds>` seconds to task's work time. \
+If the optional parameter `<Task Name>` is present, the time is beeing added to the Task with name `<Task Name>` of the currently active project.\
+If also the optional parameter `<Project Name>` is present, the time is beeing added to the task with name `<Task Name>` of project `<Project Name>`.
 
+Examples:
+~~~
+tt> at 30
+30s added to task Test Project/Debugging
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
+~~~
+tt> at 120 Task 2
+120s added to task Test Project/Task 2
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
+~~~
+tt> at 120 Project_2/Task_1
+120s added to task Project 2/Task 
+Tracking data saved to file /home/patrick/track/2021-12
+~~~
 #### `rt [<Project Name>/]<Task Name>`
 
 #### `report [<yyyy-mm>]`
