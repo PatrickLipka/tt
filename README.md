@@ -1,7 +1,7 @@
 # tt
 Simple command line time tracker for POSIX systems. \
 Written by Patrick Lipka (patrick.lipka@emea.nec.com) \
-This software is licensed under the BSD-2-clause license. Please see LICENSE for details.
+tt is free software, distributed under the terms of the [GNU] General Public License as published by the Free Software Foundation, version 3 of the License. Please see LICENSE for details.
 
 ## Dependencies
 The program uses GNU Readline (https://tiswww.case.edu/php/chet/readline/rltop.html) for command completion and history. \
@@ -251,6 +251,10 @@ Project: Code Project
 --- Debugging: 9.26
 Total: 24.35
 ~~~
+
+### `save`
+Saves the project list to file `tracking_dir/yyy-mm`.\
+This is automatically done after each meaningful change to the project list.
 
 #### `version`
 Prints the version number of `tt`
