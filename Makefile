@@ -7,7 +7,7 @@ LDFLAGS := -lreadline
 
 PREFIX ?= /usr/local
 USER_NAME ?= $(USER)
-TRACKING_DIR ?= $(HOME)/track
+TRACKING_DIR ?= /home/$(USER)/track
 
 BIN_PATH := bin
 SRC_PATH := src
@@ -43,7 +43,6 @@ install: all
 uninstall:
 	rm -rf $(PREFIX)/bin/tt
 	rm -rf $(PREFIX)/etc/tt.conf
-	@echo "tt has been uninstalled. Note: tracking data is still present at $(TRACKING_DIR)"
 
 clean:
 	rm -rf $(SRC_PATH)/*.o
