@@ -23,7 +23,7 @@ The following variables can be used to configure the build:
 * `CXX` - C++ compiler, defaults to `g++`
 * `PREFIX` - install prefix, defaults to `/usr/local`
 * `USER_NAME` - user name to be mentioned in monthly reports, defaults to `$USER`
-* `TRACKING_DIR` - directory where tracking files are saved, defaults to `/home/$USER/track`
+* `TRACKING_DIR` - directory where tracking files are saved, defaults to `$HOME/track`
 
 The user name and tracking directory can also be set after installation by modifying `$PREFIX/etc/tt.conf`
 
@@ -33,8 +33,6 @@ The default install process is:
 USER_NAME="<Your full name>" make
 sudo make install
 ~~~~
-
-Note that there is no `/home` directory on macOS. You may want to set `TRACKING_DIR=/Users/$USER/track`.
 
 ## Settings
 The file `$PREFIX/etc/tt.conf` has the format `key=value` and contains the following settings:
