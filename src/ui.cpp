@@ -620,5 +620,5 @@ void command_save(ProjectList *proj_list){
 void command_version(){
     std::cout << "tt v." << STRING(TT_VERSION) << std::endl;
     std::cout << "Author: Patrick Lipka (patrick.lipka@emea.nec.com)" << std::endl;
-    std::cout << "tt is free software published under the BSD-2-Clause licence (see. https://opensource.org/licenses/BSD-2-Clause)" << std::endl;
+    std::cout << "tt is free software published under the GPLv3 licence, see http://www.gnu.org/licenses/gpl-3.0.html " << std::endl;
 }
