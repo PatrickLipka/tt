@@ -3,7 +3,7 @@
 
 #include <string>
 
-#define TT_VERSION 1.0
+#define TT_VERSION 1.0.0
 
 // global variables:
 extern std::string user_name;
