@@ -129,18 +129,21 @@ void parse_input(std::string input, ProjectList *proj_list){
             command_re(argument.substr(0,first_name_end),argument.substr(first_name_end+1),proj_list);
         }
     }else if (command == "at"){
+        int seconds = 0;
         if (command_end == std::string::npos){
             std::cout << "add time: please specify time to add and task name [optional]." << std::endl;
         }else{
             // only 1 argument
-            if(is_num(trim(argument))){
-                command_at("",stoi(argument),proj_list);
+            if(argument.find(" ") == std::string::npos){
+                seconds = string2sec(argument);
+                command_at("",seconds,proj_list);
             }else{
                 size_t start_of_name = argument.find(" ");
                 std::string wtime_str = argument.substr(0,start_of_name);
                 std::string task_name = argument.substr(start_of_name+1);
-                if (is_num(wtime_str) && start_of_name != std::string::npos){
-                    command_at(task_name,stoi(wtime_str),proj_list);
+                seconds = string2sec(wtime_str);
+                if (start_of_name != std::string::npos){
+                    command_at(task_name,seconds,proj_list);
                 }else{
                     std::cout << "add time: please specify time to add and task name [optional]." << std::endl;
                 }
@@ -149,18 +152,21 @@ void parse_input(std::string input, ProjectList *proj_list){
         }
         
     }else if (command == "rt"){
+        int seconds = 0;
         if (command_end == std::string::npos){
             std::cout << "remove time: please specify time to remove and task name [optional]." << std::endl;
         }else{
             // only 1 argument
-            if(is_num(trim(argument))){
-                command_rt("",stoi(argument),proj_list);
+            if(argument.find(" ") == std::string::npos){
+                seconds = string2sec(argument);
+                command_rt("",seconds,proj_list);
             }else{
                 size_t start_of_name = argument.find(" ");
                 std::string wtime_str = argument.substr(0,start_of_name);
                 std::string task_name = argument.substr(start_of_name+1);
-                if (is_num(wtime_str) && start_of_name != std::string::npos){
-                    command_rt(task_name,stoi(wtime_str),proj_list);
+                seconds = string2sec(wtime_str);
+                if (start_of_name != std::string::npos){
+                    command_rt(task_name,seconds,proj_list);
                 }else{
                     std::cout << "remove time: please specify time to remove and task name [optional]." << std::endl;
                 }                                                                                       

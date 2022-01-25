@@ -1,4 +1,5 @@
 #include <string>
+#include <iostream>
 #include "string_utils.h"
 
 // replaces white spaces by underscores, used for readline completion
@@ -31,4 +32,46 @@ bool is_num(const std::string &str){
         if (std::isdigit(c) == 0) return false;
     }
     return true;
+}
+
+// convert string "X[s,m,h]" to seconds
+int string2sec(std::string str){
+    int seconds = 0;
+    size_t place_of_hour = str.find("h");
+    size_t place_of_minute = str.find("m");
+    size_t place_of_second = str.find("s");
+    std::string timestr=str;
+    int factor = 1;
+    
+    if (is_num(str)){
+        seconds = std::stoi(str);
+        return seconds;
+    }else if (place_of_hour < place_of_minute){
+        if (place_of_hour < place_of_second){
+            //seconds = std::stoi(str.substr(0,place_of_hour))*3600;
+            timestr = str.substr(0,place_of_hour);
+            factor = 3600;
+        }else {
+            //seconds = std::stoi(str.substr(0,place_of_second));
+            timestr = str.substr(0,place_of_second);
+        }
+    }else if (place_of_minute < place_of_hour){
+        if (place_of_minute < place_of_second){
+            //seconds = std::stoi(str.substr(0,place_of_minute))*60;
+            timestr = str.substr(0,place_of_minute);
+            factor = 60;
+        }else{
+            //seconds = std::stoi(str.substr(0,place_of_second));
+            timestr = str.substr(0,place_of_second);
+        }
+    }else{
+        timestr = str.substr(0,place_of_second);
+    }
+
+    if (is_num(timestr) && timestr.length() > 0){
+        seconds = std::stoi(timestr)*factor;
+    } else{
+            std::cout << "Wrong format of time string. Allowed: <X> OR <X>s OR <X>m OR <X>h." << std::endl;
+    }
+    return seconds;
 }

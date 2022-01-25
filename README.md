@@ -196,8 +196,8 @@ Time worked on project: 00:00:06
 Tracking data saved to file /home/patrick/track/2021-12
 ~~~
 
-#### `at <seconds> [<Project Name>/][<Task Name>]`
-Manually adds `<seconds>` seconds to task's work time. \
+#### `at <time>[s/m/h] [<Project Name>/][<Task Name>]`
+Manually adds `<time>` to task's work time. If `<time>` is followed by `m` or `h`, `<time>` is interpreted as minutes / hours. With `s` or without a postfix, time is interpreted as seconds. \
 If the optional parameter `<Task Name>` is present, the time is beeing added to the Task with name `<Task Name>` of the currently active project.\
 If also the optional parameter `<Project Name>` is present, the time is beeing added to the task with name `<Task Name>` of project `<Project Name>`.
 
