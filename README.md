@@ -208,12 +208,12 @@ tt> at 30
 Tracking data saved to file /home/patrick/track/2021-12
 ~~~
 ~~~
-tt> at 120 Task 2
-120s added to task Test Project/Task 2
-Tracking data saved to file /home/patrick/track/2021-12
+tt> at 2h Task 2
+7200s added to task Test Project/Task 2
+Tracking data saved to file /home/patrick/track/2022-01
 ~~~
 ~~~
-tt> at 120 Project_2/Task_1
+tt> at 120s Project_2/Task_1
 120s added to task Project 2/Task 
 Tracking data saved to file /home/patrick/track/2021-12
 ~~~
