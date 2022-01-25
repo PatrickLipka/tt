@@ -521,14 +521,14 @@ void command_rt(std::string input, int wtime, ProjectList *proj_list){
                 std::cout << "Task " << proj_list->active_project->name << "/" << proj_name << " does not exist." << std::endl;
                 return ;
             }
-            proj_list->active_project->active_task->add_time(-wtime);
+            proj_list->active_project->active_task->add_time(-1*wtime);
             std::cout << wtime << "s removed from task " << proj_list->active_project->name << "/" << proj_list->active_project->active_task->name  << std::endl;
             command_save(proj_list);
             return;
         }else{
             int id=proj_list->active_project->find_task_id_by_name(trim(underscore_to_space(proj_name)));
             if (id >= 0){
-                proj_list->active_project->tasks[id].add_time(-wtime);
+                proj_list->active_project->tasks[id].add_time(-1*wtime);
                 std::cout << wtime << "s removed from task " << proj_list->active_project->name << "/" << proj_list->active_project->tasks[id].name << std::endl;
                 command_save(proj_list);
                 return;
@@ -545,7 +545,7 @@ void command_rt(std::string input, int wtime, ProjectList *proj_list){
     }
     int id=proj->find_task_id_by_name(trim(underscore_to_space(task_name)));
     if(id >= 0){
-        proj->tasks[id].add_time(wtime);
+        proj->tasks[id].add_time(-1*wtime);
         std::cout << wtime << "s removed from task " << proj->name << "/" << proj->tasks[id].name << std::endl;
         command_save(proj_list);
     }else{
