@@ -588,7 +588,17 @@ void command_report(std::string date_str, ProjectList* proj_list){
     }else{
         ProjectList list(month);
         std::string file_name = tracking_dir+"/"+date_str;
-        list.load(file_name);
+        // legacy support for old tracking file format prior to version 1.3.0
+        // to be dropped with next major release
+        if (std::stoi(year) <= 2022 && std::stoi(month) <= 4){
+            std::cout << "Warning: possibly reading old data file of tt v.<1.3.0." << std::endl; 
+            std::cout << "Support for these files will be dropped with the next major release!" << std::endl;
+            std::cout << "Consider convertig them using the convert command." << std::endl << std::endl;
+            list.load(file_name,false, true);
+        }else{
+            list.load(file_name);
+        }
+        
         if (list.num_projects > 0){
             std::cout << "Report for " << user_name << ", month: " << date_str <<  std::endl << std::endl;
             for (int i=0; i<list.num_projects; i++){
@@ -614,8 +624,7 @@ void command_report(std::string date_str, ProjectList* proj_list){
 // save project list to file, uses system("mkdir") to create diretory
 // might be replaced by C++ filesystem API int the future
 void command_save(ProjectList *proj_list){
-    std::string date_str = get_date();
-    std::string file_name = tracking_dir+"/"+date_str;
+    std::string file_name = tracking_dir+"/"+proj_list->month;
     std::string command = "mkdir -p "+tracking_dir;
     system (command.c_str());
     proj_list->save(file_name);

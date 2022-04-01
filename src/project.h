@@ -33,7 +33,7 @@ class ProjectList{
         Project *active_project;
         void set_active_project(int id);
         void save(std::string file_name);
-        void load(std::string file_name, bool ignore_worktimes=false);
+        void load(std::string file_name, bool ignore_worktimes=false, bool legacy_mode=false);
         Project *find_project_by_name(std::string proj_name);
         int find_project_id_by_name(std::string proj_name); 
 };

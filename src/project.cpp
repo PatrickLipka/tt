@@ -94,6 +94,9 @@ void ProjectList::save(std::string file_name){
     if (!of){
         std::cout << "Could not open file " << file_name << " for writing!" << std::endl;
     }
+    size_t month_len = month.length();
+    of.write((char*) &month_len, sizeof(size_t));
+    of.write((char*) month.c_str(), month_len);
     of.write((char*) &num_projects, sizeof(int));
     of.write((char*) &active_project_id, sizeof(int));
     for (int i=0; i<num_projects; i++){
@@ -113,12 +116,24 @@ void ProjectList::save(std::string file_name){
 }
 
 // reads project list from binary file
-void ProjectList::load(std::string file_name, bool ignore_worktimes){
+void ProjectList::load(std::string file_name, bool ignore_worktimes, bool legacy_mode){
     std::ifstream inf(file_name, std::ios::binary);
     int active;
     if (!inf){
         std::cout << "Could not open file " << file_name << " for reading!" << std::endl;
     }
+    size_t month_len;
+
+    if (!legacy_mode){
+        // read month string from file
+        inf.read((char*) &month_len,sizeof(size_t));
+        char *month_tmp = new char[month_len+1];
+        inf.read(month_tmp,month_len);
+        month_tmp[month_len] = '\0';
+        month = month_tmp;
+        delete [] month_tmp;
+    }
+
     inf.read((char*) &num_projects,sizeof(int));
     // save copy of num_projects to control loop and apply later as
     // num_projects will get bigger when adding projects to the project list
