@@ -3,6 +3,8 @@
 #include <fstream>
 #include <iostream>
 #include "project.h"
+#include "tt.h"
+#include "util.h"
 
 Project::Project(std::string name){
     Project::name = name;    
@@ -94,6 +96,8 @@ void ProjectList::save(std::string file_name){
     if (!of){
         std::cout << "Could not open file " << file_name << " for writing!" << std::endl;
     }
+    int io_version_number= std::stoi(STRING(TT_IO_VERSION));
+    of.write((char*) &io_version_number, sizeof(int));
     size_t month_len = month.length();
     of.write((char*) &month_len, sizeof(size_t));
     of.write((char*) month.c_str(), month_len);
@@ -116,16 +120,34 @@ void ProjectList::save(std::string file_name){
 }
 
 // reads project list from binary file
-void ProjectList::load(std::string file_name, bool ignore_worktimes, bool legacy_mode){
+void ProjectList::load(std::string file_name, bool ignore_worktimes){
     std::ifstream inf(file_name, std::ios::binary);
     int active;
     if (!inf){
         std::cout << "Could not open file " << file_name << " for reading!" << std::endl;
     }
-    size_t month_len;
+    bool legacy_mode=false;
+    int io_version_number= std::stoi(STRING(TT_IO_VERSION));
+    int io_ver_num=-1;
+    inf.read((char*) &io_ver_num,sizeof(int));
 
+
+    // check for I/O version number in tracking file, toggle legacy mode depending on it
+    if(io_ver_num < io_version_number){
+        std::cout << "Reading file in legacy mode." << std::endl;
+        std::cout << "Support for files from tt v.<=1.3.0 will be dropped in the future." << std::endl;
+        std::cout << "Consider converting it using 'convert <yyyy>-<mm>'" << std::endl;
+        std::cout << std::endl;
+
+        legacy_mode=true;
+        // re-read file from the beginning
+        inf.clear();
+        inf.seekg(0);
+    }
+    size_t month_len;
     if (!legacy_mode){
         // read month string from file
+        
         inf.read((char*) &month_len,sizeof(size_t));
         char *month_tmp = new char[month_len+1];
         inf.read(month_tmp,month_len);
@@ -135,6 +157,7 @@ void ProjectList::load(std::string file_name, bool ignore_worktimes, bool legacy
     }
 
     inf.read((char*) &num_projects,sizeof(int));
+
     // save copy of num_projects to control loop and apply later as
     // num_projects will get bigger when adding projects to the project list
     int number_of_projects = num_projects;
