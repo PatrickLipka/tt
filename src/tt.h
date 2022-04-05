@@ -3,7 +3,7 @@
 
 #include <string>
 
-#define TT_VERSION 1.2.0
+#define TT_VERSION 1.2.0_dev
 #define TT_IO_VERSION 120
 
 // global variables:

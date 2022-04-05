@@ -591,13 +591,13 @@ void command_report(std::string date_str, ProjectList* proj_list){
             Project *proj = &(proj_list->projects[i]);
             float wtime_proj = proj->get_total_work_time() / 3600.0;
             if(wtime_proj >= 0.01){
-                std::cout << "Project: " << proj->name << std::endl;
+                std::cout << "Project: " << TERM_BOLD << proj->name << TERM_RESET << std::endl;
                 for(int j=0; j<proj->num_tasks; j++){
                     float wtime_task = proj->tasks[j].work_time / 3600.0;
                     if(wtime_task >= 0.01) std::cout << "--- " << proj->tasks[j].name << ": " << std::fixed << std::setprecision(2) << wtime_task << std::endl;
                 }
                 // format: *.xx hours
-                std::cout << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << std::endl << std::endl;
+                std::cout << TERM_BOLD << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << TERM_RESET << std::endl << std::endl;
             }
         }
     }else{
@@ -611,13 +611,13 @@ void command_report(std::string date_str, ProjectList* proj_list){
                 Project *proj = &(list.projects[i]);
                 float wtime_proj = proj->get_total_work_time() / 3600.0;
                 if(wtime_proj >= 0.01){
-                    std::cout << "Project: " << proj->name << std::endl;
+                    std::cout << "Project: " << TERM_BOLD << proj->name << TERM_RESET << std::endl;
                     for(int j=0; j<proj->num_tasks; j++){
                         float wtime_task = proj->tasks[j].work_time / 3600.0;
                         if(wtime_task >= 0.01) std::cout << "--- " << proj->tasks[j].name << ": " << std::fixed << std::setprecision(2) << wtime_task << std::endl;
                     }
                     // format: *.xx hours
-                    std::cout << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << std::endl << std::endl;
+                    std::cout << TERM_BOLD << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << TERM_RESET << std::endl << std::endl;
                 }
             }
         }else{
