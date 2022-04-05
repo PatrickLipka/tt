@@ -256,10 +256,10 @@ Total: 24.35
 Saves the project list to file `tracking_dir/yyy-mm`.\
 This is automatically done after each meaningful change to the project list.
 
-## `load <yyyy-mm>`
+### `load <yyyy-mm>`
 Discards the currently loaded project list and loads data from a tracking file instead.
 
-## `convert <yyyy-mm>`
+### `convert <yyyy-mm>`
 Converts tracking files written by previous versions of tt to the current format.
 
 #### `version`
