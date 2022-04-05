@@ -5,7 +5,7 @@
 #include <string>
 #include "project.h"
 
-const int num_commands=13;
+const int num_commands=14;
 extern std::string command_names[num_commands];
 extern std::vector<std::string> autocomplete_names;
 char **tt_name_completion(const char* text, int start, int end);
@@ -30,5 +30,6 @@ void command_at(std::string input, int wtime, ProjectList *proj_list);
 void command_rt(std::string input, int wtime, ProjectList *proj_list);
 void command_report(std::string date_str, ProjectList *proj_list);
 void command_save(ProjectList *proj_list);
+void command_load(std::string date_str, ProjectList *proj_list);
 void command_version();
 #endif

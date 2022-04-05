@@ -29,6 +29,7 @@ std::string command_names[num_commands]={
     "ls",
     "start",
     "save",
+    "load",
     "version"
 };
 
@@ -180,6 +181,12 @@ void parse_input(std::string input, ProjectList *proj_list){
         }
     }else if (command == "save"){
         command_save(proj_list);
+    }else if (command == "load"){
+        if(command_end == std::string::npos){
+            std::cout << "load: please specify tracking file to load (format: yyyy-mm)" << std::endl;
+        }else{
+            command_load(argument,proj_list);
+        }
     }else if (command == "version"){
         command_version();
     }
@@ -568,7 +575,7 @@ void command_report(std::string date_str, ProjectList* proj_list){
 
     if(date_str.length() == 0){
         // report for current month
-        std::string date = get_date();
+        std::string date = proj_list->month; //get_date();
         std::cout << "Report for " << user_name << ", month: " << date << std::endl << std::endl;
         
         for (int i=0; i<proj_list->num_projects; i++){
@@ -619,6 +626,23 @@ void command_save(ProjectList *proj_list){
     system (command.c_str());
     proj_list->save(file_name);
     std::cout << "Tracking data saved to file " << file_name << std::endl;
+}
+
+// discard current project list and load from file
+void command_load(std::string date_str, ProjectList* proj_list){
+    date_str = trim(date_str);
+    std::string file_name = tracking_dir+"/"+date_str;
+
+    // clear project list and load new one
+    proj_list->projects.clear();
+    proj_list->num_projects=0;
+    proj_list->month=date_str;
+    proj_list->load(file_name);
+
+    // reset autocomplete
+    autocomplete_names.clear();
+    init_autocomplete(proj_list);
+    std::cout << "Loaded project data for month " << proj_list->month << std::endl << std::endl;
 }
 
 // print version number

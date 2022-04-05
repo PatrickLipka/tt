@@ -135,7 +135,7 @@ void ProjectList::load(std::string file_name, bool ignore_worktimes){
     // check for I/O version number in tracking file, toggle legacy mode depending on it
     if(io_ver_num < io_version_number){
         std::cout << "Reading file in legacy mode." << std::endl;
-        std::cout << "Support for files from tt v.<=1.3.0 will be dropped in the future." << std::endl;
+        std::cout << "Support for files from tt v.<=1.2.0 will be dropped in the future." << std::endl;
         std::cout << "Consider converting it using 'convert <yyyy>-<mm>'" << std::endl;
         std::cout << std::endl;
 
