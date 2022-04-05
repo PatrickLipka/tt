@@ -30,6 +30,7 @@ std::string command_names[num_commands]={
     "start",
     "save",
     "load",
+    "convert",
     "version"
 };
 
@@ -187,6 +188,13 @@ void parse_input(std::string input, ProjectList *proj_list){
         }else{
             command_load(argument,proj_list);
         }
+    }else if (command == "convert"){
+        if(command_end == std::string::npos){
+            std::cout << "convert: please specify tracking file to convert (format: yyyy-mm)" << std::endl;
+        }else{
+            command_convert(argument);
+        }
+
     }else if (command == "version"){
         command_version();
     }
@@ -643,6 +651,16 @@ void command_load(std::string date_str, ProjectList* proj_list){
     autocomplete_names.clear();
     init_autocomplete(proj_list);
     std::cout << "Loaded project data for month " << proj_list->month << std::endl << std::endl;
+}
+
+// convert previous tracking file version to current one
+void command_convert(std::string date_str){
+    date_str = trim(date_str);
+    ProjectList list(date_str);
+    std::string file_name = tracking_dir+"/"+date_str;
+    list.load(file_name);
+    list.save(file_name);
+    std::cout << "Successfully converted data file" << file_name << std::endl;
 }
 
 // print version number
