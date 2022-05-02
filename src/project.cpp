@@ -147,17 +147,14 @@ void ProjectList::load(std::string file_name, bool ignore_worktimes){
     size_t month_len;
     if (!legacy_mode){
         // read month string from file
-        
         inf.read((char*) &month_len,sizeof(size_t));
         char *month_tmp = new char[month_len+1];
         inf.read(month_tmp,month_len);
-        if(!ignore_worktimes){
-            month_tmp[month_len] = '\0';
-            month = month_tmp;
-            delete [] month_tmp;
-        }else{
-            month=get_date();
-        }
+        month_tmp[month_len] = '\0';
+        month = month_tmp;
+        delete [] month_tmp;
+
+        if (ignore_worktimes) month=get_date();
     }
 
     inf.read((char*) &num_projects,sizeof(int));
