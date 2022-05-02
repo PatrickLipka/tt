@@ -1,6 +1,7 @@
 -include config.out
 
 CXX ?= g++
+CPPFLAGS ?= -DFORMATTED_TEXT
 CXXFLAGS := -std=c++11 -g -Wall -pedantic
 OBJFLAGS := $(CXXFLAGS) -c
 LDFLAGS := -lreadline
@@ -21,7 +22,7 @@ $(BIN_PATH)/tt: $(OBJ)
 	$(CXX)  $(CXXFLAGS) -o $@ $(OBJ) $(LDFLAGS)
 
 $(SRC_PATH)/%.o: $(SRC_PATH)/%.cpp
-	$(CXX) -DPREFIX=$(PREFIX) $(OBJFLAGS) -o $@ $<
+	$(CXX) -DPREFIX=$(PREFIX) $(CPPFLAGS) $(OBJFLAGS) -o $@ $<
 
 makedir:
 	@mkdir -p $(BIN_PATH)

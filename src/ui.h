@@ -1,6 +1,15 @@
 #ifndef UI_H
 #define UI_H
 
+// define terminal format codes
+#ifdef FORMATTED_TEXT
+#define TERM_BOLD "\033[1m"
+#define TERM_RESET "\033[0m"
+#else
+#define TERM_BOLD ""
+#define TERM_RESET ""
+#endif
+
 #include <vector>
 #include <string>
 #include "project.h"
