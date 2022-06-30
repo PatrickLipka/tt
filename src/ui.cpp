@@ -580,6 +580,7 @@ void command_report(std::string date_str, ProjectList* proj_list){
     size_t place_of_minus = date_str.find("-");
     std::string year = date_str.substr(0,place_of_minus);
     std::string month = date_str.substr(place_of_minus+1);
+    float total_wtime = 0.0;
 
     if(date_str.length() == 0){
         // report for current month
@@ -598,8 +599,10 @@ void command_report(std::string date_str, ProjectList* proj_list){
                 }
                 // format: *.xx hours
                 std::cout << TERM_BOLD << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << TERM_RESET << std::endl << std::endl;
+                total_wtime += wtime_proj;
             }
         }
+        std::cout << "Total work time for month: " << std::fixed << std::setprecision(2) << total_wtime << std::endl << std::endl;
     }else{
         ProjectList list(month);
         std::string file_name = tracking_dir+"/"+date_str;
@@ -618,8 +621,10 @@ void command_report(std::string date_str, ProjectList* proj_list){
                     }
                     // format: *.xx hours
                     std::cout << TERM_BOLD << "Total: " << std::fixed << std::setprecision(2) << wtime_proj << TERM_RESET << std::endl << std::endl;
+                    total_wtime += wtime_proj;
                 }
             }
+            std::cout << "Total work time for month: " << std::fixed << std::setprecision(2) << total_wtime << std::endl << std::endl;
         }else{
             std::cout << "report: Project list is empty." << std::endl;
         }
@@ -627,7 +632,7 @@ void command_report(std::string date_str, ProjectList* proj_list){
 }
 
 // save project list to file, uses system("mkdir") to create diretory
-// might be replaced by C++ filesystem API int the future
+// might be replaced by C++ filesystem API in the future
 void command_save(ProjectList *proj_list){
     std::string file_name = tracking_dir+"/"+proj_list->month;
     std::string command = "mkdir -p "+tracking_dir;
