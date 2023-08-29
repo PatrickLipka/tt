@@ -1,6 +1,6 @@
 # tt
 Simple command line time tracker for POSIX systems. \
-Written by Patrick Lipka (patrick.lipka@emea.nec.com) \
+Written by Patrick Lipka (patrick.lipka@gmail.com) \
 tt is free software, distributed under the terms of the [GNU] General Public License as published by the Free Software Foundation, version 3 of the License. Please see LICENSE for details.
 
 ## Dependencies
